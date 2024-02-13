@@ -28,13 +28,15 @@ module.exports = class extends Generator {
   }
 
   writing() {
-    this.fs.copy(
-      this.templatePath("dummyfile.txt"),
-      this.destinationPath("dummyfile.txt")
-    );
-  }
+    const pkgJson = {
+      devDependencies: {
+        eslint: "^3.15.0"
+      },
+      dependencies: {
+        react: "^16.2.0"
+      }
+    };
 
-  install() {
-    this.installDependencies();
+    this.fs.extendJSON(this.destinationPath("package.json"), pkgJson);
   }
 };

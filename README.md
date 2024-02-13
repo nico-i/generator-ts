@@ -30,7 +30,3 @@ yo @nico-i/ts
 
 [npm-image]: https://badge.fury.io/js/%40nico-i%2Fgenerator-ts.svg
 [npm-url]: https://npmjs.org/package/@nico-i/generator-ts
-[travis-image]: https://travis-ci.com/nico-i/generator-ts.svg?branch=master
-[travis-url]: https://travis-ci.com/nico-i/generator-ts
-[daviddm-image]: https://david-dm.org/nico-i/generator-ts.svg?theme=shields.io
-[daviddm-url]: https://david-dm.org/nico-i/generator-ts
