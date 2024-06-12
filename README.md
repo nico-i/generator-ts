@@ -7,21 +7,14 @@ First, install [Yeoman](http://yeoman.io) and @nico-i/generator-ts using [npm](h
 
 ```bash
 npm install -g yo
-npm install -g @nico-i/generator-ts
+npm install -g @nico-i/generator-ssg
 ```
 
 Then generate your new project:
 
 ```bash
-yo @nico-i/ts
+yo @nico-i/ssg
 ```
-
-## Getting To Know Yeoman
-
- * Yeoman has a heart of gold.
- * Yeoman is a person with feelings and opinions, but is very easy to work with.
- * Yeoman can be too opinionated at times but is easily convinced not to be.
- * Feel free to [learn more about Yeoman](http://yeoman.io/).
 
 ## License
 

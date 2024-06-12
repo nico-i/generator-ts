@@ -1,40 +1,79 @@
-"use strict";
+"use-strict";
+const { default: chalk } = require("chalk");
 const Generator = require("yeoman-generator");
-const chalk = require("chalk");
 const yosay = require("yosay");
+const { ConfigKeys } = require("../../lib/ConfigKeys");
+const { ProjectTypes } = require("../../lib/ProjectTypes");
+const { Format } = require("../../lib/Format");
 
 module.exports = class extends Generator {
-  prompting() {
-    // Have Yeoman greet the user.
-    this.log(
-      yosay(
-        `Welcome to the great ${chalk.red("@nico-i/generator-ts")} generator!`
-      )
-    );
+	initializing() {
+		this.log(
+			yosay(
+				`${chalk.green("Welcome")} to ${chalk.red("Nico's")} ${chalk.blue(
+					"TypeScript"
+				)} project ${chalk.yellow("generator")}!`
+			)
+		);
+	}
 
-    const prompts = [
-      {
-        type: "confirm",
-        name: "someAnswer",
-        message: "Would you like to enable this option?",
-        default: true
-      }
-    ];
+	async prompting() {
+		this.projectAuthorName = await this.prompt([
+			{
+				type: "input",
+				name: "name",
+				message: "What is your name?",
+				default: "Nico Ismaili"
+			}
+		]);
+		this.config.set(ConfigKeys.PROJECT_AUTHOR_NAME, this.projectAuthorName);
 
-    return this.prompt(prompts).then(props => {
-      // To access props later use this.props.someAnswer;
-      this.props = props;
-    });
-  }
+		this.projectName = await this.prompt([
+			{
+				type: "input",
+				name: "name",
+				message: "What is the name of this project?",
+				default: "ts-project"
+			}
+		]);
+		this.config.set(ConfigKeys.PROJECT_NAME, this.projectName);
 
-  writing() {
-    this.fs.copy(
-      this.templatePath("dummyfile.txt"),
-      this.destinationPath("dummyfile.txt")
-    );
-  }
+		this.projectDescription = await this.prompt([
+			{
+				type: "input",
+				name: "description",
+				message: "Write a brief description of your app",
+				default: "A TypeScript project"
+			}
+		]);
+		this.config.set(ConfigKeys.PROJECT_DESCRIPTION, this.projectDescription);
 
-  install() {
-    this.installDependencies();
-  }
+		this.projectType = await this.prompt([
+			{
+				type: "list",
+				name: "type",
+				message: "What type of project is this?",
+				choices: Object.values(ProjectTypes),
+				default: ProjectTypes.SSG
+			}
+		]);
+
+		switch (this.projectType.type) {
+			case ProjectTypes.SSG:
+				this.composeWith(require.resolve("../astro"));
+				break;
+			case ProjectTypes.PACKAGE:
+				throw new Error(chalk.red("Package project type not yet implemented."));
+			case ProjectTypes.SCRIPT:
+				throw new Error(chalk.red("Script project type not yet implemented."));
+		}
+	}
+
+	configuring() {
+		this.config.save();
+	}
+
+	end() {
+		this.log(Format.success("All done!"));
+	}
 };
