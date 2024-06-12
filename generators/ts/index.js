@@ -20,6 +20,7 @@ module.exports = class extends Generator {
 	}
 
 	install() {
-		this.spawnCommand("bun", ["add", "typescript", "@nico-i/ts-config"]);
+		this.spawnCommand("bun", ["add", "typescript"]);
+		this.spawnCommand("bun", ["add", "-D", "@nico-i/ts-config"]);
 	}
 };

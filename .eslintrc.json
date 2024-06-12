@@ -1,3 +1,4 @@
 {
-	"extends": "@nico-i/eslint-config/basic"
+	"extends": "@nico-i/eslint-config/basic",
+	"ignorePatterns": ["**/templates/**/*"]
 }

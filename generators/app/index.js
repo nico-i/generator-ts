@@ -2,7 +2,7 @@
 const { default: chalk } = require("chalk");
 const Generator = require("yeoman-generator");
 const yosay = require("yosay");
-const { ConfigKeys } = require("../../lib/ConfigKeys");
+const { PromptItems } = require("../../lib/PromptItems");
 const { ProjectTypes } = require("../../lib/ProjectTypes");
 const { Format } = require("../../lib/Format");
 
@@ -21,33 +21,27 @@ module.exports = class extends Generator {
 		this.projectAuthorName = await this.prompt([
 			{
 				type: "input",
-				name: "name",
+				name: PromptItems.PROJECT_AUTHOR_NAME,
 				message: "What is your name?",
 				default: "Nico Ismaili"
 			}
 		]);
-		this.config.set(ConfigKeys.PROJECT_AUTHOR_NAME, this.projectAuthorName);
-
 		this.projectName = await this.prompt([
 			{
 				type: "input",
-				name: "name",
+				name: PromptItems.PROJECT_NAME,
 				message: "What is the name of this project?",
 				default: "ts-project"
 			}
 		]);
-		this.config.set(ConfigKeys.PROJECT_NAME, this.projectName);
-
 		this.projectDescription = await this.prompt([
 			{
 				type: "input",
-				name: "description",
+				name: PromptItems.PROJECT_DESCRIPTION,
 				message: "Write a brief description of your app",
 				default: "A TypeScript project"
 			}
 		]);
-		this.config.set(ConfigKeys.PROJECT_DESCRIPTION, this.projectDescription);
-
 		this.projectType = await this.prompt([
 			{
 				type: "list",
@@ -60,17 +54,17 @@ module.exports = class extends Generator {
 
 		switch (this.projectType.type) {
 			case ProjectTypes.SSG:
-				this.composeWith(require.resolve("../astro"));
+				this.composeWith(require.resolve("../astro"), {
+					[PromptItems.PROJECT_AUTHOR_NAME]: this.projectAuthorName,
+					[PromptItems.PROJECT_NAME]: this.projectName,
+					[PromptItems.PROJECT_DESCRIPTION]: this.projectDescription
+				});
 				break;
 			case ProjectTypes.PACKAGE:
 				throw new Error(chalk.red("Package project type not yet implemented."));
 			case ProjectTypes.SCRIPT:
 				throw new Error(chalk.red("Script project type not yet implemented."));
 		}
-	}
-
-	configuring() {
-		this.config.save();
 	}
 
 	end() {

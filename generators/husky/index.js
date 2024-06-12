@@ -19,7 +19,7 @@ module.exports = class extends Generator {
 		this.fs.copy(this.templatePath(".husky"), this.destinationPath(".husky"));
 		this.fs.extendJSON(packageJsonPath, {
 			scripts: {
-				prepare: "husky install"
+				prepare: "husky || true"
 			}
 		});
 		this.log(Format.success("Husky commit-msg hook set up!"));
@@ -28,7 +28,7 @@ module.exports = class extends Generator {
 	install() {
 		this.spawnCommand("bun", [
 			"add",
-			"-d",
+			"-D",
 			"@commitlint/cli",
 			"@commitlint/config-conventional",
 			"commitlint-plugin-spend",

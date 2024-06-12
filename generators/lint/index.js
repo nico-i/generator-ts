@@ -14,31 +14,47 @@ module.exports = class extends Generator {
 		]);
 	}
 
-	writing() {
-		const packageJsonPath = this.destinationPath("package.json");
-
-		if (!this.fs.exists(packageJsonPath)) {
+	default() {
+		if (!this.fs.exists(this.packageJson.path)) {
 			throw new Error(
 				"No package.json found in the project directory. Please run this generator in the root of your project."
 			);
 		}
+		this.packageJsonContent = this.fs.readJSON(this.packageJson.path);
+	}
+
+	writing() {
+		this.log(Format.step("Adding prettier config to project directory"));
+		this.fs.copy(
+			this.templatePath(".prettierrc.cjs"),
+			this.destinationPath(".prettierrc.cjs")
+		);
+		this.log(Format.success("Prettier config added to project directory!"));
 
 		this.log(
-			Format.step("Adding prettierrc.json and .eslintrc.json to project directory")
+			Format.step(
+				"Adding or attempting to extend eslint config to project directory"
+			)
 		);
-		this.fs.copy(this.templatePath(), this.destinationPath(), {
-			globOptions: { dot: true }
-		});
-
-		this.log(Format.success("Prettier and ESLint config files added!"));
+		if (this.fs.exists(this.destinationPath(".eslintrc.json"))) {
+			const eslintConfig = this.fs.readJSON(this.templatePath(".eslintrc.json"));
+			this.fs.extendJSON(this.destinationPath(".eslintrc.json"), {
+				...eslintConfig
+			});
+		} else {
+			this.fs.copy(
+				this.templatePath(".eslintrc.json"),
+				this.destinationPath(".eslintrc.json")
+			);
+		}
 
 		this.log(Format.step("Adding lint- and format-scripts to package.json"));
-		this.fs.extendJSON(packageJsonPath, {
+		this.fs.extendJSON(this.packageJson.path, {
 			scripts: {
-				lint: "eslint . --ext .js,.jsx,.ts,.tsx,.json",
-				"lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx,.json --fix",
-				format: "prettier --write .",
-				"format:check": "prettier --check ."
+				lint: "eslint",
+				"lint:fix": "eslint --fix",
+				format: "prettier --write",
+				"format:check": "prettier --check"
 			}
 		});
 		this.log(Format.success("Lint- and format-scripts added to package.json!"));
@@ -46,33 +62,49 @@ module.exports = class extends Generator {
 		if (!this.setupLintStaged) return;
 
 		this.log(Format.step("Adding lint-staged to package.json"));
-		this.fs.extendJSON(packageJsonPath, {
+		this.fs.extendJSON(this.packageJson.path, {
 			"lint-staged": {
 				"*.{js,ts,jsx,tsx,json}": ["npm run lint:fix", "npm run format", "git add"]
 			}
 		});
 		this.log(Format.success("Lint-staged added to package.json!"));
 
-		const huskyPath = this.destinationPath(".husky");
-
-		if (!huskyPath) {
-			this.log(Format.warning("husky does not seem to be installed"));
-			this.log(Format.step("Installing husky..."));
-			this.spawnCommand("bun", ["add", "-d", "husky"]);
-			this.spawnCommand("bunx", ["husky", "init"]);
-			this.log(Format.success("husky installed!"));
+		if (!this.packageJsonContent.toString().includes("husky")) {
+			this.installHusky = true;
+		}
+		if (!this.packageJsonContent.scripts.prepare.includes("husky")) {
+			this.fs.extendJSON(this.packageJson.path, {
+				scripts: {
+					prepare: "husky || true"
+				}
+			});
 		}
 
 		this.log(Format.step("Adding lint-staged to pre-commit hook"));
-		this.fs.copy(this.templatePath(".husky"), this.destinationPath(huskyPath));
-
+		const preCommitHookPath = this.destinationPath(".husky/pre-commit");
+		if (this.fs.exists(preCommitHookPath)) {
+			this.fs.append(preCommitHookPath, "\n. npx --no-install lint-staged");
+		} else {
+			this.fs.write(
+				preCommitHookPath,
+				"#!/bin/sh\n. npx --no-install lint-staged"
+			);
+		}
 		this.log(Format.success("Lint-staged added to pre-commit hook!"));
 	}
 
 	install() {
+		if (this.installHusky) {
+			this.spawnCommand("bun", ["add", "-D", "husky"]);
+		}
+
+		if (this.setupLintStaged) {
+			this.spawnCommand("bun", ["add", "-D", "lint-staged"]);
+		}
+
 		this.spawnCommand("bun", [
 			"add",
-			"-d",
+			"-D",
 			"prettier",
 			"@nico-i/prettier-config",
 			"lint-staged",

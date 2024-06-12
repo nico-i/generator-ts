@@ -1,6 +1,6 @@
 "use-strict";
 const Generator = require("yeoman-generator");
-const { ConfigKeys } = require("../../lib/ConfigKeys");
+const { PromptItems } = require("../../lib/PromptItems");
 
 const AdditionalFeatures = {
 	I18N: `i18n`,
@@ -10,37 +10,52 @@ const AdditionalFeatures = {
 };
 
 module.exports = class extends Generator {
-	initializing() {
-		this.destinationRoot(this.destinationPath("./test"));
+	constructor(args, opts) {
+		super(args, opts);
+		this.argument(PromptItems.PROJECT_AUTHOR_NAME, {
+			type: String,
+			required: false
+		});
+		this.argument(PromptItems.PROJECT_NAME, {
+			type: String,
+			required: false
+		});
+		this.argument(PromptItems.PROJECT_DESCRIPTION, {
+			type: String,
+			required: false
+		});
+
+		this.destinationRoot("./test");
 	}
 
 	async prompting() {
 		this.projectAuthorName =
-			this.config.get(ConfigKeys.PROJECT_AUTHOR_NAME) ||
+			this.options[PromptItems.PROJECT_AUTHOR_NAME] ||
 			(await this.prompt([
 				{
 					type: "input",
-					name: "name",
+					name: PromptItems.PROJECT_AUTHOR_NAME,
 					message: "What is your name?",
 					default: "Nico Ismaili"
 				}
 			]));
+
 		this.projectName =
-			this.config.get(ConfigKeys.PROJECT_NAME) ||
+			this.options[PromptItems.PROJECT_NAME] ||
 			(await this.prompt([
 				{
 					type: "input",
-					name: "name",
+					name: PromptItems.PROJECT_NAME,
 					message: "What is the name of this project?",
 					default: "ssg-project"
 				}
 			]));
 		this.projectDescription =
-			this.config.get(ConfigKeys.PROJECT_DESCRIPTION) ||
+			this.options[PromptItems.PROJECT_DESCRIPTION] ||
 			(await this.prompt([
 				{
 					type: "input",
-					name: "description",
+					name: PromptItems.PROJECT_DESCRIPTION,
 					message: "Write a brief description of your app",
 					default: "A static site generator project"
 				}
