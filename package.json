@@ -19,13 +19,14 @@
 	"devDependencies": {
 		"@commitlint/cli": "^19.3.0",
 		"@commitlint/config-conventional": "^19.2.2",
-		"@nico-i/eslint-config": "^1.0.0",
+		"@nico-i/eslint-config": "^1.1.0",
+		"@nico-i/prettier-config": "^1.0.0",
 		"commitlint-plugin-spend": "^1.0.1",
 		"eslint": "^8.57.0",
 		"husky": "^9.0.11",
 		"jest": "^26.1.0",
-		"lint-staged": "^9.4.3",
-		"prettier": "^1.19.1",
+		"lint-staged": "^15.2.6",
+		"prettier": "^3.3.2",
 		"yeoman-assert": "^3.1.1",
 		"yeoman-test": "^1.7.0"
 	},
@@ -41,13 +42,12 @@
 		"testEnvironment": "node"
 	},
 	"lint-staged": {
-		"*.js": [
-			"eslint --fix",
-			"git add"
+		"*.{js,ts,jsx,tsx}": [
+			"npm run lint:fix",
+			"npm run format"
 		],
 		"*.json": [
-			"prettier --write",
-			"git add"
+			"npm run format"
 		]
 	},
 	"husky": {
@@ -56,10 +56,12 @@
 		}
 	},
 	"scripts": {
-		"lint": "eslint .",
-		"lint:fix": "eslint --fix .",
+		"lint": "eslint",
+		"lint:fix": "eslint --fix",
 		"test": "jest",
-		"prepare": "husky || true"
+		"prepare": "husky || true",
+		"format": "prettier --write",
+		"format:check": "prettier --check"
 	},
 	"repository": "nico-i/generator-ts",
 	"license": "MIT"
