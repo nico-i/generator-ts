@@ -17,9 +17,12 @@
 		"yeoman-generator"
 	],
 	"devDependencies": {
+		"@commitlint/cli": "^19.3.0",
+		"@commitlint/config-conventional": "^19.2.2",
 		"@nico-i/eslint-config": "^1.0.0",
+		"commitlint-plugin-spend": "^1.0.1",
 		"eslint": "^8.57.0",
-		"husky": "^3.0.9",
+		"husky": "^9.0.11",
 		"jest": "^26.1.0",
 		"lint-staged": "^9.4.3",
 		"prettier": "^1.19.1",
@@ -55,7 +58,8 @@
 	"scripts": {
 		"lint": "eslint .",
 		"lint:fix": "eslint --fix .",
-		"test": "jest"
+		"test": "jest",
+		"prepare": "husky || true"
 	},
 	"repository": "nico-i/generator-ts",
 	"license": "MIT"
