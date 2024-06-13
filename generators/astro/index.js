@@ -24,8 +24,6 @@ module.exports = class extends Generator {
 			type: String,
 			required: false,
 		});
-
-		this.destinationRoot("./test");
 	}
 
 	async prompting() {
