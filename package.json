@@ -56,8 +56,8 @@
 		}
 	},
 	"scripts": {
-		"lint": "eslint",
-		"lint:fix": "eslint --fix",
+		"lint": "eslint .",
+		"lint:fix": "eslint --fix .",
 		"test": "jest",
 		"prepare": "husky || true",
 		"format": "prettier --write .",

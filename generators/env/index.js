@@ -1,6 +1,6 @@
 "use-strict";
-const Generator = require("yeoman-generator");
-const { Format } = require("../../lib/Format");
+const Generator = require(`yeoman-generator`);
+const { Format } = require(`../../lib/Format`);
 
 module.exports = class extends Generator {
 	initializing() {
@@ -12,9 +12,9 @@ module.exports = class extends Generator {
 		this.scriptNamesToUpdate = (
 			await this.prompt([
 				{
-					type: "checkbox",
-					name: "scriptNamesToUpdate",
-					message: "Which scripts should be updated to use the created .env file?",
+					type: `checkbox`,
+					name: `scriptNamesToUpdate`,
+					message: `Which scripts should be updated to use the created .env file?`,
 					choices: Object.keys(this.scripts),
 				},
 			])
@@ -22,9 +22,9 @@ module.exports = class extends Generator {
 	}
 
 	writing() {
-		this.log(Format.step("Creating .env file"));
-		this.fs.write(this.destinationPath(".env"), "");
-		this.log(Format.success(".env file created successfully"));
+		this.log(Format.step(`Creating .env file`));
+		this.fs.write(this.destinationPath(`.env`), ``);
+		this.log(Format.success(`.env file created successfully`));
 
 		if (this.scriptNamesToUpdate.length == 0) {
 			return;
@@ -42,10 +42,10 @@ module.exports = class extends Generator {
 				...updatedScripts,
 			},
 		});
-		this.log(Format.success("Scripts updated successfully"));
+		this.log(Format.success(`Scripts updated successfully`));
 	}
 
 	install() {
-		this.spawnCommand("bun", ["add", "@dotenvx/dotenvx"]);
+		this.spawnCommand(`bun`, [`add`, `@dotenvx/dotenvx`]);
 	}
 };
