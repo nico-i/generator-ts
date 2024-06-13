@@ -71,8 +71,14 @@ module.exports = class extends Generator {
 		this.log(Format.success("Lint-staged added to package.json!"));
 
 		if (!this.packageJsonContent.toString().includes("husky")) {
+			this.log(
+				Format.warning(
+					"husky does not seem to be installed, husky will be installed",
+				),
+			);
 			this.installHusky = true;
 		}
+
 		if (!this.packageJsonContent.scripts.prepare.includes("husky")) {
 			this.fs.extendJSON(this.packageJson.path, {
 				scripts: {

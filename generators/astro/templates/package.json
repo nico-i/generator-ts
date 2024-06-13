@@ -12,7 +12,6 @@
 		"@nico-i/ts-config": "^1.0.0"
 	},
 	"scripts": {
-		"prepare": "husky",
 		"dev": "astro dev",
 		"build": "astro check && astro build",
 		"preview": "astro preview",
