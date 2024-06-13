@@ -64,8 +64,8 @@ module.exports = class extends Generator {
 		this.log(Format.step("Adding lint-staged to package.json"));
 		this.fs.extendJSON(this.packageJson.path, {
 			"lint-staged": {
-				"*.{js,ts,jsx,tsx}": ["npm run lint:fix", "npm run format"],
-				"*.json": ["npm run format"],
+				"*.{js,ts,jsx,tsx}": ["eslint --fix", "prettier --write"],
+				"*.json": ["prettier --write"],
 			},
 		});
 		this.log(Format.success("Lint-staged added to package.json!"));

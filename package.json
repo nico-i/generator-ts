@@ -43,11 +43,11 @@
 	},
 	"lint-staged": {
 		"*.{js,ts,jsx,tsx}": [
-			"npm run lint:fix",
-			"npm run format"
+			"eslint --fix",
+			"prettier --write"
 		],
 		"*.json": [
-			"npm run format"
+			"prettier --write"
 		]
 	},
 	"husky": {
