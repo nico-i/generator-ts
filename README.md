@@ -1,4 +1,5 @@
 # @nico-i/generator-ts [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url]
+
 > A yeoman generator for all my TypeScript projects.
 
 ## Installation
@@ -18,8 +19,7 @@ yo @nico-i/ssg
 
 ## License
 
- © [Nico Ismaili](nico.ismaili.de)
-
+© [Nico Ismaili](nico.ismaili.de)
 
 [npm-image]: https://badge.fury.io/js/%40nico-i%2Fgenerator-ts.svg
 [npm-url]: https://npmjs.org/package/@nico-i/generator-ts

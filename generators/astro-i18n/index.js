@@ -6,7 +6,7 @@ module.exports = class extends Generator {
 	initializing() {
 		if (!this.fs.exists(this.destinationPath("package.json"))) {
 			throw new Error(
-				"No package.json found in the project directory. Please run this generator in the root of your project."
+				"No package.json found in the project directory. Please run this generator in the root of your project.",
 			);
 		}
 	}
@@ -23,28 +23,28 @@ module.exports = class extends Generator {
 						{
 							value: "en",
 							name: "English",
-							checked: true
+							checked: true,
 						},
 						{
 							value: "de",
 							name: "German",
-							checked: true
+							checked: true,
 						},
 						{
 							value: "fr",
-							name: "French"
+							name: "French",
 						},
 						{
 							value: "es",
-							name: "Spanish"
+							name: "Spanish",
 						},
 
 						{
 							value: "no",
-							name: "Norwegian"
-						}
-					]
-				}
+							name: "Norwegian",
+						},
+					],
+				},
 			])
 		).locales;
 
@@ -54,8 +54,8 @@ module.exports = class extends Generator {
 				name: "defaultLocale",
 				message: "What is the default locale?",
 				choices: this.locales,
-				default: this.locales.includes("en") ? "en" : this.locales[0]
-			}
+				default: this.locales.includes("en") ? "en" : this.locales[0],
+			},
 		]);
 	}
 
@@ -63,18 +63,18 @@ module.exports = class extends Generator {
 		this.log(Format.step("Adding `gen:i18n` script to package.json"));
 		this.fs.extendJSON(this.destinationPath("package.json"), {
 			scripts: {
-				"gen:i18n": "npx astro-i18next generate"
-			}
+				"gen:i18n": "npx astro-i18next generate",
+			},
 		});
 		this.log(Format.success("Scripts updated successfully"));
 
 		this.log(
-			Format.step("Copying locales and corresponding translation messages")
+			Format.step("Copying locales and corresponding translation messages"),
 		);
-		this.locales.forEach(locale => {
+		this.locales.forEach((locale) => {
 			this.fs.copy(
 				this.templatePath(`public/locales/${locale}/common.json`),
-				this.destinationPath(`public/locales/${locale}/common.json`)
+				this.destinationPath(`public/locales/${locale}/common.json`),
 			);
 		});
 		this.log(Format.success("Locales copied successfully"));
@@ -85,21 +85,21 @@ module.exports = class extends Generator {
 			this.destinationPath("astro-i18next.config.mjs"),
 			{
 				defaultLocale: this.defaultLocale.defaultLocale,
-				locales: this.locales
-			}
+				locales: this.locales,
+			},
 		);
 		this.log(Format.success("astro-i18next config added successfully"));
 
 		this.log(Format.step("Updating Astro config with astro-i18next"));
 		if (!this.fs.exists(this.destinationPath("astro.config.mjs"))) {
 			throw new Error(
-				"No astro.config.mjs found in the project directory. Please run this generator in the root of your project."
+				"No astro.config.mjs found in the project directory. Please run this generator in the root of your project.",
 			);
 		} else {
 			const astroConfig = this.fs.read(this.destinationPath("astro.config.mjs"));
 			if (astroConfig.includes("astroI18next")) {
 				throw new Error(
-					"Your project already contains a astro-i18next integration in astro.config.mjs"
+					"Your project already contains a astro-i18next integration in astro.config.mjs",
 				);
 			}
 			let newAstroConfig =
@@ -107,13 +107,13 @@ module.exports = class extends Generator {
 			if (astroConfig.includes("integrations:")) {
 				newAstroConfig = newAstroConfig.replace(
 					"integrations: [",
-					`integrations: [astroI18next()`
+					`integrations: [astroI18next()`,
 				);
 			} else {
 				newAstroConfig = newAstroConfig.replace(
 					"defineConfig({",
 					`defineConfig({
-					integrations: [astroI18next()],`
+					integrations: [astroI18next()],`,
 				);
 			}
 			this.log(newAstroConfig);

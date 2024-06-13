@@ -11,9 +11,9 @@ module.exports = class extends Generator {
 		this.log(
 			yosay(
 				`${chalk.green("Welcome")} to ${chalk.red("Nico's")} ${chalk.blue(
-					"TypeScript"
-				)} project ${chalk.yellow("generator")}!`
-			)
+					"TypeScript",
+				)} project ${chalk.yellow("generator")}!`,
+			),
 		);
 	}
 
@@ -23,24 +23,24 @@ module.exports = class extends Generator {
 				type: "input",
 				name: PromptItems.PROJECT_AUTHOR_NAME,
 				message: "What is your name?",
-				default: "Nico Ismaili"
-			}
+				default: "Nico Ismaili",
+			},
 		]);
 		this.projectName = await this.prompt([
 			{
 				type: "input",
 				name: PromptItems.PROJECT_NAME,
 				message: "What is the name of this project?",
-				default: "ts-project"
-			}
+				default: "ts-project",
+			},
 		]);
 		this.projectDescription = await this.prompt([
 			{
 				type: "input",
 				name: PromptItems.PROJECT_DESCRIPTION,
 				message: "Write a brief description of your app",
-				default: "A TypeScript project"
-			}
+				default: "A TypeScript project",
+			},
 		]);
 		this.projectType = await this.prompt([
 			{
@@ -48,8 +48,8 @@ module.exports = class extends Generator {
 				name: "type",
 				message: "What type of project is this?",
 				choices: Object.values(ProjectTypes),
-				default: ProjectTypes.SSG
-			}
+				default: ProjectTypes.SSG,
+			},
 		]);
 
 		switch (this.projectType.type) {
@@ -57,7 +57,7 @@ module.exports = class extends Generator {
 				this.composeWith(require.resolve("../astro"), {
 					[PromptItems.PROJECT_AUTHOR_NAME]: this.projectAuthorName,
 					[PromptItems.PROJECT_NAME]: this.projectName,
-					[PromptItems.PROJECT_DESCRIPTION]: this.projectDescription
+					[PromptItems.PROJECT_DESCRIPTION]: this.projectDescription,
 				});
 				break;
 			case ProjectTypes.PACKAGE:

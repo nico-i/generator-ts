@@ -7,7 +7,7 @@ module.exports = class extends Generator {
 		const packageJsonPath = this.destinationPath("package.json");
 		if (!this.fs.exists(packageJsonPath)) {
 			throw new Error(
-				"No package.json found in the project directory. Please run this generator in the root of your project."
+				"No package.json found in the project directory. Please run this generator in the root of your project.",
 			);
 		}
 
@@ -19,8 +19,8 @@ module.exports = class extends Generator {
 		this.fs.copy(this.templatePath(".husky"), this.destinationPath(".husky"));
 		this.fs.extendJSON(packageJsonPath, {
 			scripts: {
-				prepare: "husky || true"
-			}
+				prepare: "husky || true",
+			},
 		});
 		this.log(Format.success("Husky commit-msg hook set up!"));
 	}
@@ -32,7 +32,7 @@ module.exports = class extends Generator {
 			"@commitlint/cli",
 			"@commitlint/config-conventional",
 			"commitlint-plugin-spend",
-			"husky"
+			"husky",
 		]);
 	}
 };

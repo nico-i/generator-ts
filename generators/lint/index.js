@@ -53,8 +53,8 @@ module.exports = class extends Generator {
 			scripts: {
 				lint: "eslint",
 				"lint:fix": "eslint --fix",
-				format: "prettier --write",
-				"format:check": "prettier --check",
+				format: "prettier --write .",
+				"format:check": "prettier --check .",
 			},
 		});
 		this.log(Format.success("Lint- and format-scripts added to package.json!"));

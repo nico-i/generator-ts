@@ -6,7 +6,7 @@ const AdditionalFeatures = {
 	I18N: `i18n`,
 	E2E_TESTS: `Playwright`,
 	GQL: `GraphQL TS SDK generation`,
-	DOT_ENV: `dotenvx`
+	DOT_ENV: `dotenvx`,
 };
 
 module.exports = class extends Generator {
@@ -14,15 +14,15 @@ module.exports = class extends Generator {
 		super(args, opts);
 		this.argument(PromptItems.PROJECT_AUTHOR_NAME, {
 			type: String,
-			required: false
+			required: false,
 		});
 		this.argument(PromptItems.PROJECT_NAME, {
 			type: String,
-			required: false
+			required: false,
 		});
 		this.argument(PromptItems.PROJECT_DESCRIPTION, {
 			type: String,
-			required: false
+			required: false,
 		});
 
 		this.destinationRoot("./test");
@@ -36,8 +36,8 @@ module.exports = class extends Generator {
 					type: "input",
 					name: PromptItems.PROJECT_AUTHOR_NAME,
 					message: "What is your name?",
-					default: "Nico Ismaili"
-				}
+					default: "Nico Ismaili",
+				},
 			]));
 
 		this.projectName =
@@ -47,8 +47,8 @@ module.exports = class extends Generator {
 					type: "input",
 					name: PromptItems.PROJECT_NAME,
 					message: "What is the name of this project?",
-					default: "ssg-project"
-				}
+					default: "ssg-project",
+				},
 			]));
 		this.projectDescription =
 			this.options[PromptItems.PROJECT_DESCRIPTION] ||
@@ -57,8 +57,8 @@ module.exports = class extends Generator {
 					type: "input",
 					name: PromptItems.PROJECT_DESCRIPTION,
 					message: "Write a brief description of your app",
-					default: "A static site generator project"
-				}
+					default: "A static site generator project",
+				},
 			]));
 
 		this.appTitle = await this.prompt([
@@ -66,8 +66,8 @@ module.exports = class extends Generator {
 				type: "input",
 				name: "site",
 				message: "What is the title of your website?",
-				default: "Astro App"
-			}
+				default: "Astro App",
+			},
 		]);
 
 		this.additionalFeatures = await this.prompt([
@@ -75,14 +75,14 @@ module.exports = class extends Generator {
 				type: "checkbox",
 				name: "features",
 				message: "Select additional features to include in your project",
-				choices: Object.values(AdditionalFeatures)
-			}
+				choices: Object.values(AdditionalFeatures),
+			},
 		]);
 	}
 
 	writing() {
 		this.fs.copy(this.templatePath(), this.destinationPath(), {
-			globOptions: { dot: true }
+			globOptions: { dot: true },
 		});
 
 		// package.json
@@ -92,16 +92,16 @@ module.exports = class extends Generator {
 			{
 				name: this.projectName,
 				description: this.projectDescription,
-				author: this.projectAuthorName
-			}
+				author: this.projectAuthorName,
+			},
 		);
 		// index.astro
 		this.fs.copyTpl(
 			this.templatePath("src/pages/index.astro"),
 			this.destinationPath("src/pages/index.astro"),
 			{
-				title: this.appTitle
-			}
+				title: this.appTitle,
+			},
 		);
 		// README.md
 		this.fs.copyTpl(
@@ -109,8 +109,8 @@ module.exports = class extends Generator {
 			this.destinationPath("README.md"),
 			{
 				title: this.appTitle,
-				description: this.projectDescription
-			}
+				description: this.projectDescription,
+			},
 		);
 
 		this.composeWith(require.resolve("../ts"));

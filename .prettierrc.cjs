@@ -1,5 +1,5 @@
-const { prettierConfig } = require('@nico-i/prettier-config');
+const { prettierConfig } = require("@nico-i/prettier-config");
 
 module.exports = {
-    ...prettierConfig,
+	...prettierConfig,
 };

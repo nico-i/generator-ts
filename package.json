@@ -60,8 +60,8 @@
 		"lint:fix": "eslint --fix",
 		"test": "jest",
 		"prepare": "husky || true",
-		"format": "prettier --write",
-		"format:check": "prettier --check"
+		"format": "prettier --write .",
+		"format:check": "prettier --check ."
 	},
 	"repository": "nico-i/generator-ts",
 	"license": "MIT"
