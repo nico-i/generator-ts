@@ -7,6 +7,8 @@ on:
 
 jobs:
   publish-npm:
+    env:
+      HUSKY: 0
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
