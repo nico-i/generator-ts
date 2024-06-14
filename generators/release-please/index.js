@@ -4,7 +4,7 @@ const { Format } = require(`../../lib/Format`);
 
 module.exports = class extends Generator {
 	writing() {
-		this.log(Format.step(`Adding "Publish to npm" GitHub actions workflow`));
+		this.log(Format.step(`Adding "release-please" GitHub actions workflow`));
 		this.fs.copy(this.templatePath(), this.destinationPath(), {
 			globOptions: { dot: true },
 		});
@@ -12,7 +12,7 @@ module.exports = class extends Generator {
 
 		this.log(
 			Format.warning(
-				`Please remember to add the "NPM_TOKEN" secret to your repository`,
+				`Please remember to add the "MY_RELEASE_PLEASE_TOKEN" secret to your repository`,
 			),
 		);
 	}
