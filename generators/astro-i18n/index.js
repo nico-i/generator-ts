@@ -63,7 +63,7 @@ module.exports = class extends Generator {
 		this.log(Format.step(`Adding \`gen:i18n\` script to package.json`));
 		this.fs.extendJSON(this.destinationPath(`package.json`), {
 			scripts: {
-				"gen:i18n": `npx astro-i18next generate`,
+				"gen:i18n": `bunx astro-i18next generate`,
 			},
 		});
 		this.log(Format.success(`Scripts updated successfully`));
