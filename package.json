@@ -57,6 +57,7 @@
 	},
 	"scripts": {
 		"lint": "eslint .",
+		"lint:types": "tsc --noEmit --incremental false",
 		"lint:fix": "eslint --fix .",
 		"test": "jest",
 		"prepare": "husky || true",

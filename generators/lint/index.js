@@ -52,6 +52,7 @@ module.exports = class extends Generator {
 		this.fs.extendJSON(this.packageJson.path, {
 			scripts: {
 				lint: `eslint .`,
+				"lint:types": `tsc --noEmit --incremental false`,
 				"lint:fix": `eslint --fix .`,
 				format: `prettier --write .`,
 				"format:check": `prettier --check .`,
