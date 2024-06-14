@@ -1,3 +1,3 @@
 {
-	"extends": "@nico-i/ts-config"
+	"extends": "@nico-i/ts-config/basic"
 }

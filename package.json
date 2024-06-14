@@ -2,15 +2,14 @@
 	"name": "@nico-i/generator-ts",
 	"version": "0.0.0",
 	"description": "A yeoman generator for all my TypeScript related projects",
-	"homepage": "",
 	"author": {
 		"name": "Nico Ismaili",
 		"email": "nico@ismaili.de",
 		"url": "https://nico.ismaili.de"
 	},
 	"files": [
-		"app",
-		"gql"
+		"generators",
+		"lib"
 	],
 	"main": "generators/index.js",
 	"keywords": [
@@ -21,6 +20,7 @@
 		"@commitlint/config-conventional": "^19.2.2",
 		"@nico-i/eslint-config": "^1.1.0",
 		"@nico-i/prettier-config": "^1.0.0",
+		"@nico-i/ts-config": "^1.2.0",
 		"commitlint-plugin-spend": "^1.0.1",
 		"eslint": "^8.57.0",
 		"husky": "^9.0.11",
@@ -34,7 +34,7 @@
 		"npm": ">= 4.0.0"
 	},
 	"dependencies": {
-		"chalk": "^5.0.0",
+		"chalk": "^2.1.0",
 		"yeoman-generator": "^5.10.0",
 		"yosay": "^3.0.0"
 	},

@@ -8,7 +8,7 @@ module.exports = class extends Generator {
 		if (this.fs.exists(tsConfigPath)) {
 			this.log(Format.step(`Extending tsconfig.json with @nico-i/ts-config`));
 			this.fs.extendJSON(tsConfigPath, {
-				extends: `@nico-i/ts-config`,
+				extends: `@nico-i/ts-config/basic`,
 			});
 		} else {
 			this.log(Format.step(`Adding tsconfig.json to project directory`));
