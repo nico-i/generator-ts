@@ -23,13 +23,13 @@
 		"@nico-i/prettier-config": "^1.0.0",
 		"@nico-i/ts-config": "^1.2.0",
 		"commitlint-plugin-spend": "^1.0.1",
-		"eslint": "^8.57.0",
+		"eslint": "^9.0.0",
 		"husky": "^9.0.11",
-		"jest": "^26.1.0",
+		"jest": "^29.0.0",
 		"lint-staged": "^15.2.6",
 		"prettier": "^3.3.2",
 		"yeoman-assert": "^3.1.1",
-		"yeoman-test": "^1.7.0"
+		"yeoman-test": "^8.0.0"
 	},
 	"engines": {
 		"npm": ">= 4.0.0"
@@ -38,9 +38,9 @@
 		"access": "public"
 	},
 	"dependencies": {
-		"chalk": "^2.1.0",
-		"yeoman-generator": "^5.10.0",
-		"yosay": "^2.0.2"
+		"chalk": "^5.0.0",
+		"yeoman-generator": "^7.0.0",
+		"yosay": "^3.0.0"
 	},
 	"jest": {
 		"testEnvironment": "node"
