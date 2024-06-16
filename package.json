@@ -7,6 +7,7 @@
 		"email": "nico@ismaili.de",
 		"url": "https://nico.ismaili.de"
 	},
+	"type": "module",
 	"files": [
 		"generators",
 		"lib"
