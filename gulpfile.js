@@ -8,7 +8,7 @@ gulp.task("transpile", () =>
 );
 
 gulp.task("copy", () =>
-	gulp.src("src/generators/**/templates/**/*").pipe(gulp.dest(`./generators`)),
+	gulp.src("src/generators/**/templates").pipe(gulp.dest(`./generators`)),
 );
 
 gulp.task("build", gulp.series("transpile", "copy"));
