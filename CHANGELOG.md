@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.1](https://github.com/nico-i/generator-ts/compare/v1.0.0...v1.0.1) (2024-06-19)
+
+
+### Bug Fixes
+
+* updated publish workflow ([c9b73ac](https://github.com/nico-i/generator-ts/commit/c9b73aceb1c676095529470f2c98fdbca135078b))
+
 ## 1.0.0 (2024-06-19)
 
 
