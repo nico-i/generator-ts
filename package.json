@@ -78,6 +78,8 @@
 		}
 	},
 	"scripts": {
+		"build": "bunx gulp",
+		"dev": "bunx gulp watch",
 		"lint": "bunx eslint .",
 		"lint:fix": "bunx eslint --fix .",
 		"lint:types": "tsc --noEmit --incremental false",
