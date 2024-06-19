@@ -1,30 +1,41 @@
-"use-strict";
-const Generator = require(`yeoman-generator`);
-const { Format } = require(`../../lib/Format`);
+import Generator from "yeoman-generator";
+import { Format } from "../../utils/Format";
+import { GeneratorArgs } from "../../utils/types/Args";
+import { GeneratorOptions } from "../../utils/types/Options";
 
-const Args = {
-	DEPLOY_WORKFLOW_NAME: `deployWorkflowName`,
-	OUTPUT_DIR: `outputDir`,
-	DEPLOYED_PAGE_URL: `deployedPageUrl`,
-};
+enum OptionNames {
+	DEPLOY_WORKFLOW_NAME = `deployWorkflowName`,
+	OUTPUT_DIR = `outputDir`,
+	DEPLOYED_PAGE_URL = `deployedPageUrl`,
+}
 
-module.exports = class extends Generator {
-	constructor(args, opts) {
+interface Options {
+	[OptionNames.DEPLOY_WORKFLOW_NAME]: string;
+	[OptionNames.OUTPUT_DIR]: string;
+	[OptionNames.DEPLOYED_PAGE_URL]: string;
+}
+
+module.exports = class extends Generator<Options> {
+	private deployWorkflowName: string = ``;
+	private outputDir: string = ``;
+	private deployedPageUrl: string = ``;
+
+	constructor(args: GeneratorArgs<Options>, opts: GeneratorOptions<Options>) {
 		super(args, opts);
 
-		this.argument(Args.DEPLOY_WORKFLOW_NAME, {
+		this.argument(OptionNames.DEPLOY_WORKFLOW_NAME, {
 			type: String,
 			required: false,
 			description: `The name of the deploy workflow`,
 		});
 
-		this.argument(Args.OUTPUT_DIR, {
+		this.argument(OptionNames.OUTPUT_DIR, {
 			type: String,
 			required: false,
 			description: `The output directory`,
 		});
 
-		this.argument(Args.DEPLOYED_PAGE_URL, {
+		this.argument(OptionNames.DEPLOYED_PAGE_URL, {
 			type: String,
 			required: false,
 			description: `The URL of the deployed page`,
@@ -35,21 +46,21 @@ module.exports = class extends Generator {
 		const prompts = [
 			{
 				type: `input`,
-				name: Args.DEPLOY_WORKFLOW_NAME,
+				name: OptionNames.DEPLOY_WORKFLOW_NAME,
 				message: `What is the name of the deploy workflow?`,
 				default: `Deploy to GitHub Pages`,
 			},
 			{
 				type: `input`,
-				name: Args.OUTPUT_DIR,
+				name: OptionNames.OUTPUT_DIR,
 				message: `What is the output directory?`,
 				default: `docs/img`,
 			},
 			{
 				type: `input`,
-				name: Args.DEPLOYED_PAGE_URL,
+				name: OptionNames.DEPLOYED_PAGE_URL,
 				message: `What is the URL of the deployed page?`,
-				validate: (input) => {
+				validate: (input: string) => {
 					if (input.length === 0) {
 						return `URL is required`;
 					}
@@ -63,11 +74,11 @@ module.exports = class extends Generator {
 			},
 		];
 
-		this.answers = await this.prompt(prompts);
+		const answers = await this.prompt(prompts);
 
-		this.deployWorkflowName = this.answers[Args.DEPLOY_WORKFLOW_NAME];
-		this.outputDir = this.answers[Args.OUTPUT_DIR];
-		this.deployedPageUrl = this.answers[Args.DEPLOYED_PAGE_URL];
+		this.deployWorkflowName = answers[OptionNames.DEPLOY_WORKFLOW_NAME];
+		this.outputDir = answers[OptionNames.OUTPUT_DIR];
+		this.deployedPageUrl = answers[OptionNames.DEPLOYED_PAGE_URL];
 	}
 
 	writing() {

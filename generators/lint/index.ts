@@ -1,8 +1,16 @@
-"use-strict";
-const Generator = require(`yeoman-generator`);
-const { Format } = require(`../../lib/Format`);
+import Generator from "yeoman-generator";
+import { Format } from "../../utils/Format";
 
-module.exports = class extends Generator {
+interface Options {
+	setupLintStaged: boolean;
+}
+
+module.exports = class extends Generator<Options> {
+	private setupLintStaged: boolean = false;
+	private installHusky: boolean = false;
+	/*eslint-disable @typescript-eslint/no-explicit-any*/
+	private packageJsonContent: Record<string, any> = {};
+
 	async prompting() {
 		this.setupLintStaged = await this.prompt([
 			{
@@ -15,15 +23,18 @@ module.exports = class extends Generator {
 	}
 
 	default() {
-		if (!this.fs.exists(this.packageJson.path)) {
+		const packageJsonPath = this.destinationPath(`package.json`);
+		if (!this.fs.exists(packageJsonPath)) {
 			throw new Error(
 				`No package.json found in the project directory. Please run this generator in the root of your project.`,
 			);
 		}
-		this.packageJsonContent = this.fs.readJSON(this.packageJson.path);
+		this.packageJsonContent = this.fs.readJSON(packageJsonPath);
 	}
 
 	writing() {
+		const packageJsonPath = this.destinationPath(`package.json`);
+
 		this.log(Format.step(`Adding prettier config to project directory`));
 		this.fs.copy(
 			this.templatePath(`.prettierrc.cjs`),
@@ -49,7 +60,7 @@ module.exports = class extends Generator {
 		}
 
 		this.log(Format.step(`Adding lint- and format-scripts to package.json`));
-		this.fs.extendJSON(this.packageJson.path, {
+		this.fs.extendJSON(packageJsonPath, {
 			scripts: {
 				lint: `eslint .`,
 				"lint:types": `tsc --noEmit --incremental false`,
@@ -63,7 +74,7 @@ module.exports = class extends Generator {
 		if (!this.setupLintStaged) return;
 
 		this.log(Format.step(`Adding lint-staged to package.json`));
-		this.fs.extendJSON(this.packageJson.path, {
+		this.fs.extendJSON(packageJsonPath, {
 			"lint-staged": {
 				"*.{js,ts,jsx,tsx}": [`eslint --fix`, `prettier --write`],
 				"*.json": [`prettier --write`],
@@ -71,7 +82,10 @@ module.exports = class extends Generator {
 		});
 		this.log(Format.success(`Lint-staged added to package.json!`));
 
-		if (!this.packageJsonContent.toString().includes(`husky`)) {
+		if (
+			!this.packageJsonContent.husky &&
+			!this.packageJsonContent.scripts.prepare.includes(`husky`)
+		) {
 			this.log(
 				Format.warning(
 					`husky does not seem to be installed, husky will be installed`,
@@ -81,7 +95,7 @@ module.exports = class extends Generator {
 		}
 
 		if (!this.packageJsonContent.scripts.prepare.includes(`husky`)) {
-			this.fs.extendJSON(this.packageJson.path, {
+			this.fs.extendJSON(packageJsonPath, {
 				scripts: {
 					prepare: `husky || true`,
 				},

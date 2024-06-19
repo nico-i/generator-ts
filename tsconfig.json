@@ -1,3 +1,18 @@
 {
-	"extends": "@nico-i/ts-config/basic"
+	"extends": "@nico-i/ts-config/basic",
+	"compilerOptions": {
+		"outDir": ".",
+		"rootDir": ".",
+		"module": "commonjs",
+		"target": "es6",
+		"lib": ["es6"],
+		"moduleResolution": "node",
+		"noImplicitAny": true,
+		"strictNullChecks": true,
+		"sourceMap": false,
+		"skipLibCheck": true,
+		"esModuleInterop": true
+	},
+	"include": ["src/**/*", "generators", "utils"],
+	"exclude": ["**/templates/**", "node_modules"]
 }

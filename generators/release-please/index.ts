@@ -1,8 +1,7 @@
-"use-strict";
-const Generator = require(`yeoman-generator`);
-const { Format } = require(`../../lib/Format`);
+import Generator from "yeoman-generator";
+import { Format } from "../../utils/Format";
 
-module.exports = class extends Generator {
+export default class extends Generator {
 	writing() {
 		this.log(Format.step(`Adding "release-please" GitHub actions workflow`));
 		this.fs.copy(this.templatePath(), this.destinationPath(), {
@@ -16,4 +15,4 @@ module.exports = class extends Generator {
 			),
 		);
 	}
-};
+}

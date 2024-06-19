@@ -1,8 +1,7 @@
-"use-strict";
-const Generator = require(`yeoman-generator`);
-const { Format } = require(`../../lib/Format`);
+import Generator from "yeoman-generator";
+import { Format } from "../../utils/Format";
 
-module.exports = class extends Generator {
+export default class extends Generator {
 	writing() {
 		const packageJsonPath = this.destinationPath(`package.json`);
 		if (!this.fs.exists(packageJsonPath)) {
@@ -35,4 +34,4 @@ module.exports = class extends Generator {
 			`husky`,
 		]);
 	}
-};
+}

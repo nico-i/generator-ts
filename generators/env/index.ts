@@ -1,10 +1,12 @@
-"use-strict";
-const Generator = require(`yeoman-generator`);
-const { Format } = require(`../../lib/Format`);
+import Generator from "yeoman-generator";
+import { Format } from "../../utils/Format";
 
 module.exports = class extends Generator {
+	private scripts: Record<string, string> = {};
+	private scriptNamesToUpdate: string[] = [];
+
 	initializing() {
-		const packageJson = this.fs.readJSON(this.packageJson.path);
+		const packageJson = this.fs.readJSON(this.destinationPath("package.json"));
 		this.scripts = packageJson.scripts;
 	}
 
@@ -30,13 +32,15 @@ module.exports = class extends Generator {
 			return;
 		}
 
-		const updatedScripts = this.scriptNamesToUpdate.reduce((acc, scriptName) => {
+		const updatedScripts = this.scriptNamesToUpdate.reduce<
+			Record<string, string>
+		>((acc, scriptName) => {
 			const script = this.scripts[scriptName];
 			const updatedScript = `dotenvx run -f=.env -- ${script}`;
 			acc[scriptName] = updatedScript;
 			return acc;
 		}, {});
-		this.fs.extendJSON(this.packageJson.path, {
+		this.fs.extendJSON(this.destinationPath("package.json"), {
 			scripts: {
 				...this.scripts,
 				...updatedScripts,

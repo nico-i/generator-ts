@@ -1,8 +1,7 @@
-"use-strict";
-const Generator = require(`yeoman-generator`);
-const { Format } = require(`../../lib/Format`);
+import Generator from "yeoman-generator";
+import { Format } from "../../utils/Format";
 
-module.exports = class extends Generator {
+export default class extends Generator {
 	writing() {
 		const tsConfigPath = this.destinationPath(`tsconfig.json`);
 		if (this.fs.exists(tsConfigPath)) {
@@ -23,4 +22,4 @@ module.exports = class extends Generator {
 		this.spawnCommand(`bun`, [`add`, `typescript`]);
 		this.spawnCommand(`bun`, [`add`, `-D`, `@nico-i/ts-config`]);
 	}
-};
+}

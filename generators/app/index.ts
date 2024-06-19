@@ -1,12 +1,26 @@
-"use-strict";
-const { default: chalk } = require(`chalk`);
-const Generator = require(`yeoman-generator`);
-const yosay = require(`yosay`);
-const { PromptItems } = require(`../../lib/PromptItems`);
-const { ProjectTypes } = require(`../../lib/ProjectTypes`);
-const { Format } = require(`../../lib/Format`);
+import chalk from "chalk";
+import Generator from "yeoman-generator";
+import yosay from "yosay";
+import { Format } from "../../utils/Format";
 
-module.exports = class extends Generator {
+enum ProjectTypes {
+	SSG = `SSG-based Web App`,
+	PACKAGE = `NPM package`,
+	SCRIPT = `Node.js script`,
+}
+
+enum OptionNames {
+	PROJECT_AUTHOR_NAME = `projectAuthorName`,
+	PROJECT_NAME = `projectName`,
+	PROJECT_DESCRIPTION = `projectDescription`,
+}
+
+export default class extends Generator {
+	private projectAuthorName: string = `Nico Ismaili`;
+	private projectName: string = `ts-project`;
+	private projectDescription: string = `A TypeScript project`;
+	private projectType: ProjectTypes = ProjectTypes.SSG;
+
 	initializing() {
 		this.log(
 			yosay(
@@ -21,43 +35,45 @@ module.exports = class extends Generator {
 		this.projectAuthorName = await this.prompt([
 			{
 				type: `input`,
-				name: PromptItems.PROJECT_AUTHOR_NAME,
+				name: OptionNames.PROJECT_AUTHOR_NAME,
 				message: `What is your name?`,
-				default: `Nico Ismaili`,
+				default: this.projectAuthorName,
 			},
 		]);
 		this.projectName = await this.prompt([
 			{
 				type: `input`,
-				name: PromptItems.PROJECT_NAME,
+				name: OptionNames.PROJECT_NAME,
 				message: `What is the name of this project?`,
-				default: `ts-project`,
+				default: this.projectName,
 			},
 		]);
 		this.projectDescription = await this.prompt([
 			{
 				type: `input`,
-				name: PromptItems.PROJECT_DESCRIPTION,
+				name: OptionNames.PROJECT_DESCRIPTION,
 				message: `Write a brief description of your app`,
-				default: `A TypeScript project`,
+				default: this.projectDescription,
 			},
 		]);
-		this.projectType = await this.prompt([
-			{
-				type: `list`,
-				name: `type`,
-				message: `What type of project is this?`,
-				choices: Object.values(ProjectTypes),
-				default: ProjectTypes.SSG,
-			},
-		]);
+		this.projectType = (
+			await this.prompt([
+				{
+					type: `list`,
+					name: `type`,
+					message: `What type of project is this?`,
+					choices: Object.values(ProjectTypes),
+					default: this.projectType,
+				},
+			])
+		).type;
 
-		switch (this.projectType.type) {
+		switch (this.projectType) {
 			case ProjectTypes.SSG:
 				this.composeWith(require.resolve(`../astro`), {
-					[PromptItems.PROJECT_AUTHOR_NAME]: this.projectAuthorName,
-					[PromptItems.PROJECT_NAME]: this.projectName,
-					[PromptItems.PROJECT_DESCRIPTION]: this.projectDescription,
+					[OptionNames.PROJECT_AUTHOR_NAME]: this.projectAuthorName,
+					[OptionNames.PROJECT_NAME]: this.projectName,
+					[OptionNames.PROJECT_DESCRIPTION]: this.projectDescription,
 				});
 				break;
 			case ProjectTypes.PACKAGE:
@@ -70,4 +86,4 @@ module.exports = class extends Generator {
 	end() {
 		this.log(Format.success(`All done!`));
 	}
-};
+}

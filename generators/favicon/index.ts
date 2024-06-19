@@ -1,20 +1,29 @@
-"use-strict";
-const Generator = require(`yeoman-generator`);
-const { Format } = require(`../../lib/Format`);
+import Generator from "yeoman-generator";
+import { Format } from "../../utils/Format";
 
-const Args = {
-	FAVICON_PATH: `faviconPath`,
-	OUTPUT_DIR_PATH: `outputDirPath`,
-};
+enum OptionNames {
+	FAVICON_PATH = `faviconPath`,
+	OUTPUT_DIR_PATH = `outputDirPath`,
+}
 
-module.exports = class extends Generator {
-	constructor(args, opts) {
+interface Options {
+	[OptionNames.FAVICON_PATH]: string;
+	[OptionNames.OUTPUT_DIR_PATH]: string;
+}
+
+module.exports = class extends Generator<Options> {
+	private faviconPath: string = ``;
+	private outputDirPath: string = ``;
+	private htmlCode: string = ``;
+
+	constructor(args: string | string[], opts: Options) {
 		super(args, opts);
-		this.argument(Args.FAVICON_PATH, {
+
+		this.argument(OptionNames.FAVICON_PATH, {
 			type: String,
 			required: false,
 		});
-		this.argument(Args.OUTPUT_DIR_PATH, {
+		this.argument(OptionNames.OUTPUT_DIR_PATH, {
 			type: String,
 			required: false,
 		});
@@ -22,29 +31,29 @@ module.exports = class extends Generator {
 
 	async prompting() {
 		this.faviconPath =
-			this.options[Args.FAVICON_PATH] ||
+			this.options[OptionNames.FAVICON_PATH] ||
 			(
 				await this.prompt([
 					{
 						type: `input`,
-						name: Args.FAVICON_PATH,
+						name: OptionNames.FAVICON_PATH,
 						message: `What is the path to the favicon?`,
 						default: `favicon.png`,
 					},
 				])
-			)[Args.FAVICON_PATH];
+			)[OptionNames.FAVICON_PATH];
 		this.outputDirPath =
-			this.options[Args.OUTPUT_DIR_PATH] ||
+			this.options[OptionNames.OUTPUT_DIR_PATH] ||
 			(
 				await this.prompt([
 					{
 						type: `input`,
-						name: Args.OUTPUT_DIR_PATH,
+						name: OptionNames.OUTPUT_DIR_PATH,
 						message: `Where should the generated favicon files be saved?`,
 						default: `public`,
 					},
 				])
-			)[Args.OUTPUT_DIR_PATH];
+			)[OptionNames.OUTPUT_DIR_PATH];
 	}
 
 	writing() {

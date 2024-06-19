@@ -1,42 +1,56 @@
-"use-strict";
-const Generator = require(`yeoman-generator`);
-const { Format } = require(`../../lib/Format`);
+import Generator from "yeoman-generator";
+import { Format } from "../../utils/Format";
+import { GeneratorArgs } from "../../utils/types/Args";
+import { GeneratorOptions } from "../../utils/types/Options";
 
-const Args = {
-	SCHEMA_PATH: `schemaPath`,
-	HEADERS: `headers`,
-	DOCUMENTS: `documentPaths`,
-	OUTPUT_PATH: `outputPath`,
-};
+enum OptionNames {
+	SCHEMA_PATH = `schemaPath`,
+	HEADERS = `headers`,
+	DOCUMENTS = `documentPaths`,
+	OUTPUT_PATH = `outputPath`,
+}
 
-module.exports = class extends Generator {
-	constructor(args, opts) {
+interface Options {
+	[OptionNames.SCHEMA_PATH]: string;
+	[OptionNames.HEADERS]: string;
+	[OptionNames.DOCUMENTS]: string;
+	[OptionNames.OUTPUT_PATH]: string;
+}
+
+export default class extends Generator<Options> {
+	private schemaPath: string = ``;
+	private headers: string | undefined;
+	private documents: string = `[]`;
+	private outputPath: string = ``;
+	private setupWatcher: boolean = true;
+
+	private parseDocumentsConfigStr(documentsValue: string) {
+		const cleanedStr = documentsValue.replace(/'/g, `"`);
+		return JSON.parse(cleanedStr);
+	}
+
+	constructor(args: GeneratorArgs, opts: GeneratorOptions<Options>) {
 		super(args, opts);
 
-		this.parseDocumentsConfigStr = (documentsConfigStr) => {
-			const cleanedStr = documentsConfigStr.replace(/'/g, `"`);
-			return JSON.parse(cleanedStr);
-		};
-
-		this.argument(Args.SCHEMA_PATH, {
+		this.argument(OptionNames.SCHEMA_PATH, {
 			type: String,
 			required: false,
 			description: `Path or URL to the schema file`,
 		});
 
-		this.argument(Args.HEADERS, {
+		this.argument(OptionNames.HEADERS, {
 			type: String,
 			required: false,
 			description: `Custom headers as an object in JSON`,
 		});
 
-		this.argument(Args.DOCUMENTS, {
+		this.argument(OptionNames.DOCUMENTS, {
 			type: String,
 			required: false,
 			description: `Graphql generator "documents" config option as an array JSON string`,
 		});
 
-		this.argument(Args.OUTPUT_PATH, {
+		this.argument(OptionNames.OUTPUT_PATH, {
 			type: String,
 			required: false,
 			description: `Path to the output file`,
@@ -45,11 +59,11 @@ module.exports = class extends Generator {
 
 	async prompting() {
 		this.schemaPath =
-			this.options[Args.SCHEMA_PATH] ||
+			this.options[OptionNames.SCHEMA_PATH] ||
 			(
 				await this.prompt({
 					type: `input`,
-					name: Args.SCHEMA_PATH,
+					name: OptionNames.SCHEMA_PATH,
 					message: `What is the path / URL to your schema file?`,
 					validate: (input) => {
 						if (!input) {
@@ -69,7 +83,7 @@ module.exports = class extends Generator {
 						return true;
 					},
 				})
-			)[Args.SCHEMA_PATH];
+			)[OptionNames.SCHEMA_PATH];
 
 		const hasCustomHeaders = (
 			await this.prompt({
@@ -82,23 +96,23 @@ module.exports = class extends Generator {
 
 		if (hasCustomHeaders) {
 			this.headers =
-				this.options[Args.HEADERS] ||
+				this.options[OptionNames.HEADERS] ||
 				(
 					await this.prompt({
 						type: `input`,
-						name: Args.HEADERS,
+						name: OptionNames.HEADERS,
 						message: `Please provide the custom headers as an object in JSON`,
 					})
-				)[Args.HEADERS];
+				)[OptionNames.HEADERS];
 		} else {
 			this.headers = undefined;
 		}
 		const documentsAnswer =
-			this.options[Args.DOCUMENTS] ||
+			this.options[OptionNames.DOCUMENTS] ||
 			(
 				await this.prompt({
 					type: `input`,
-					name: Args.DOCUMENTS,
+					name: OptionNames.DOCUMENTS,
 					message: `What are the patterns to find the GraphQL definitions in your project?`,
 					validate: (input) => {
 						if (!input) {
@@ -115,16 +129,16 @@ module.exports = class extends Generator {
 						return true;
 					},
 				})
-			)[Args.DOCUMENTS];
+			)[OptionNames.DOCUMENTS];
 
 		this.documents = this.parseDocumentsConfigStr(documentsAnswer);
 
 		this.outputPath =
-			this.options[Args.OUTPUT_PATH] ||
+			this.options[OptionNames.OUTPUT_PATH] ||
 			(
 				await this.prompt({
 					type: `input`,
-					name: Args.OUTPUT_PATH,
+					name: OptionNames.OUTPUT_PATH,
 					message: `Where would you like to save the generated output?`,
 					validate: (input) => {
 						if (!input) {
@@ -133,7 +147,7 @@ module.exports = class extends Generator {
 						return true;
 					},
 				})
-			)[Args.OUTPUT_PATH];
+			)[OptionNames.OUTPUT_PATH];
 
 		this.setupWatcher = (
 			await this.prompt({
@@ -151,19 +165,21 @@ module.exports = class extends Generator {
 			this.templatePath(`codegen.ts`),
 			this.destinationPath(`codegen.ts`),
 			{
-				[Args.SCHEMA_PATH]: this.schemaPath,
-				[Args.HEADERS]: this.headers,
-				[Args.DOCUMENTS]: this.documents,
-				[Args.OUTPUT_PATH]: this.outputPath,
+				[OptionNames.SCHEMA_PATH]: this.schemaPath,
+				[OptionNames.HEADERS]: this.headers,
+				[OptionNames.DOCUMENTS]: this.documents,
+				[OptionNames.OUTPUT_PATH]: this.outputPath,
 			},
 		);
 		this.log(Format.success(`codegen config file generated successfully`));
 
 		this.log(Format.step(`Adding codegens script to package.json`));
-		this.fs.extendJSON(this.packageJson.path, {
+		this.fs.extendJSON(this.destinationPath(`package.json`), {
 			scripts: {
 				"gen:gql": `bunx graphql-codegen`,
-				"gen:gql:watch": `bunx graphql-codegen --watch`,
+				...(this.setupWatcher
+					? { "gen:gql:watch": `bunx graphql-codegen --watch` }
+					: {}),
 			},
 		});
 		this.log(Format.success(`scripts added successfully`));
@@ -180,4 +196,4 @@ module.exports = class extends Generator {
 			`@parcel/watcher`,
 		]);
 	}
-};
+}

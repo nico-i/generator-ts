@@ -1,8 +1,10 @@
-"use-strict";
-const Generator = require(`yeoman-generator`);
-const { Format } = require(`../../lib/Format`);
+import Generator from "yeoman-generator";
+import { Format } from "../../utils/Format";
 
-module.exports = class extends Generator {
+export default class extends Generator {
+	private locales: string[] = [];
+	private defaultLocale: string = ``;
+
 	initializing() {
 		if (!this.fs.exists(this.destinationPath(`package.json`))) {
 			throw new Error(
@@ -48,15 +50,19 @@ module.exports = class extends Generator {
 			])
 		).locales;
 
-		this.defaultLocale = await this.prompt([
-			{
-				type: `list`,
-				name: `defaultLocale`,
-				message: `What is the default locale?`,
-				choices: this.locales,
-				default: this.locales.includes(`en`) ? `en` : this.locales[0],
-			},
-		]);
+		this.defaultLocale = this.locales.includes(`en`) ? `en` : this.locales[0];
+
+		this.defaultLocale = (
+			await this.prompt([
+				{
+					type: `list`,
+					name: `defaultLocale`,
+					message: `What is the default locale?`,
+					choices: this.locales,
+					default: this.defaultLocale,
+				},
+			])
+		).defaultLocale;
 	}
 
 	writing() {
@@ -84,7 +90,7 @@ module.exports = class extends Generator {
 			this.templatePath(`astro-i18next.config.mjs`),
 			this.destinationPath(`astro-i18next.config.mjs`),
 			{
-				defaultLocale: this.defaultLocale.defaultLocale,
+				defaultLocale: this.defaultLocale,
 				locales: this.locales,
 			},
 		);
@@ -126,4 +132,4 @@ module.exports = class extends Generator {
 	install() {
 		this.spawnCommand(`bun`, [`add`, `astro-i18next`]);
 	}
-};
+}

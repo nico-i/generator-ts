@@ -1,18 +1,16 @@
-const { default: chalk } = require(`chalk`);
+import chalk from "chalk";
 
-const Format = {
-	warning: (message) => {
+export const Format = {
+	warning: (message: string) => {
 		return chalk.yellow(`⚠ ${message}`);
 	},
-	step: (message) => {
+	step: (message: string) => {
 		return `${message} …`;
 	},
-	success: (message) => {
+	success: (message: string) => {
 		return `${chalk.green(`✓`)} ${chalk.greenBright(message)}`;
 	},
-	instruction: (message) => {
+	instruction: (message: string) => {
 		return `${chalk.blueBright(message)}`;
 	},
 };
-
-module.exports = { Format };
