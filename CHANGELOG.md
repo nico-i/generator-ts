@@ -1,5 +1,19 @@
 # Changelog
 
+## [1.1.0](https://github.com/nico-i/generator-ts/compare/v1.0.1...v1.1.0) (2024-07-18)
+
+
+### Features
+
+* fixed type errors and successfully ran everything ([078d838](https://github.com/nico-i/generator-ts/commit/078d838198ef13ffcdd10a36de7c11095d88d1ba))
+* reverted yeoman-generator version ([4865489](https://github.com/nico-i/generator-ts/commit/4865489a4916c69bc7a5de396893d1924a622b51))
+
+
+### Bug Fixes
+
+* **deps:** update dependency @astrojs/check to ^0.8.0 ([6bf1580](https://github.com/nico-i/generator-ts/commit/6bf1580d6f613ae1f650418900fa544199b4f0d4))
+* updated publish command ([30b8750](https://github.com/nico-i/generator-ts/commit/30b875071ce1c40a777800e949250b6110538c77))
+
 ## [1.0.1](https://github.com/nico-i/generator-ts/compare/v1.0.0...v1.0.1) (2024-06-19)
 
 
