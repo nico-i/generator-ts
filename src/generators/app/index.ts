@@ -32,30 +32,36 @@ export default class extends Generator {
 	}
 
 	async prompting() {
-		this.projectAuthorName = await this.prompt([
-			{
-				type: `input`,
-				name: OptionNames.PROJECT_AUTHOR_NAME,
-				message: `What is your name?`,
-				default: this.projectAuthorName,
-			},
-		]);
-		this.projectName = await this.prompt([
-			{
-				type: `input`,
-				name: OptionNames.PROJECT_NAME,
-				message: `What is the name of this project?`,
-				default: this.projectName,
-			},
-		]);
-		this.projectDescription = await this.prompt([
-			{
-				type: `input`,
-				name: OptionNames.PROJECT_DESCRIPTION,
-				message: `Write a brief description of your app`,
-				default: this.projectDescription,
-			},
-		]);
+		this.projectAuthorName = (
+			await this.prompt([
+				{
+					type: `input`,
+					name: OptionNames.PROJECT_AUTHOR_NAME,
+					message: `What is your name?`,
+					default: this.projectAuthorName,
+				},
+			])
+		)[OptionNames.PROJECT_AUTHOR_NAME];
+		this.projectName = (
+			await this.prompt([
+				{
+					type: `input`,
+					name: OptionNames.PROJECT_NAME,
+					message: `What is the name of this project?`,
+					default: this.projectName,
+				},
+			])
+		)[OptionNames.PROJECT_NAME];
+		this.projectDescription = (
+			await this.prompt([
+				{
+					type: `input`,
+					name: OptionNames.PROJECT_DESCRIPTION,
+					message: `Write a brief description of your app`,
+					default: this.projectDescription,
+				},
+			])
+		)[OptionNames.PROJECT_DESCRIPTION];
 		this.projectType = (
 			await this.prompt([
 				{

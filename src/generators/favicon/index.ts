@@ -88,9 +88,22 @@ module.exports = class extends Generator<Options> {
 		this.log(Format.success(`Favicon files generated`));
 
 		this.log(Format.step(`Generating pastable HTML code`));
-		this.htmlCode = this.fs.readJSON(
-			this.destinationPath(`tmp.json`),
-		).favicon.html_code;
+
+		const tmpJsonContent = this.fs.readJSON(this.destinationPath(`tmp.json`));
+		if (
+			!tmpJsonContent ||
+			typeof tmpJsonContent !== `object` ||
+			Array.isArray(tmpJsonContent) ||
+			!tmpJsonContent.favicon ||
+			typeof tmpJsonContent.favicon !== `object` ||
+			Array.isArray(tmpJsonContent.favicon) ||
+			!tmpJsonContent.favicon.html_code ||
+			typeof tmpJsonContent.favicon.html_code !== `string`
+		) {
+			throw new Error(`tmp.json file does not contain the expected favicon data`);
+		}
+
+		this.htmlCode = tmpJsonContent.favicon.html_code;
 		this.log(Format.success(`Pastable HTML code generated`));
 	}
 

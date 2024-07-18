@@ -12,40 +12,34 @@ enum OptionNames {
 	PROJECT_AUTHOR_NAME = `projectAuthorName`,
 	PROJECT_NAME = `projectName`,
 	PROJECT_DESCRIPTION = `projectDescription`,
+	FEATURES = `additionalFeatures`,
+	APP_TITLE = `appTitle`,
 }
 
 interface Options {
 	[OptionNames.PROJECT_AUTHOR_NAME]: string;
 	[OptionNames.PROJECT_NAME]: string;
 	[OptionNames.PROJECT_DESCRIPTION]: string;
+	[OptionNames.APP_TITLE]: string;
+	[OptionNames.FEATURES]: Features[];
 }
 
-type Answers = Generator.GeneratorOptions &
-	Options & {
-		appTitle: string;
-		additionalFeatures: string[];
-	};
+type Answers = Generator.GeneratorOptions & Options;
 
 export default class extends Generator<Options> {
 	private projectAuthorName: Answers[OptionNames.PROJECT_AUTHOR_NAME] = `Nico Ismaili`;
 	private projectName: Answers[OptionNames.PROJECT_NAME] = `ssg-project`;
 	private projectDescription: Answers[OptionNames.PROJECT_DESCRIPTION] = `Astro App`;
-	private appTitle: Answers["appTitle"] = `Astro App`;
-	private additionalFeatures: Answers["additionalFeatures"] = [];
+	private appTitle: Answers[OptionNames.APP_TITLE] = `Astro App`;
+	private additionalFeatures: Answers[OptionNames.FEATURES] = [];
 
 	constructor(args: string | string[], opts: Options) {
 		super(args, opts);
-		this.argument(OptionNames.PROJECT_AUTHOR_NAME, {
-			type: String,
-			required: false,
-		});
-		this.argument(OptionNames.PROJECT_NAME, {
-			type: String,
-			required: false,
-		});
-		this.argument(OptionNames.PROJECT_DESCRIPTION, {
-			type: String,
-			required: false,
+		Object.values(OptionNames).forEach((value) => {
+			this.argument(value, {
+				type: String,
+				required: false,
+			});
 		});
 	}
 
@@ -92,23 +86,23 @@ export default class extends Generator<Options> {
 			await this.prompt([
 				{
 					type: `input`,
-					name: `site`,
+					name: OptionNames.APP_TITLE,
 					message: `What is the title of your website?`,
 					default: this.appTitle,
 				},
 			])
-		).site;
+		)[OptionNames.APP_TITLE];
 
 		this.additionalFeatures = (
 			await this.prompt([
 				{
 					type: `checkbox`,
-					name: `features`,
+					name: OptionNames.FEATURES,
 					message: `Select additional features to include in your project`,
 					choices: Object.values(Features),
 				},
 			])
-		).features;
+		)[OptionNames.FEATURES];
 	}
 
 	writing() {

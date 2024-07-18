@@ -28,17 +28,12 @@
 		"@types/mem-fs": "^1.1.5",
 		"@types/yeoman-generator": "^5.2.14",
 		"@types/yosay": "^2.0.3",
-		"ajv": "^8.16.0",
 		"chalk": "^4.1.2",
-		"copy-webpack-plugin": "^12.0.2",
 		"gulp": "^5.0.0",
 		"gulp-cli": "^3.0.0",
 		"gulp-typescript": "^6.0.0-alpha.1",
-		"install": "^0.13.0",
-		"typescript": "^5.4.5",
+		"typescript": "^5.0.0",
 		"typescript-eslint": "^7.13.1",
-		"webpack": "^5.92.0",
-		"webpack-cli": "^5.1.4",
 		"yeoman-generator": "^5.3.0",
 		"yosay": "2.0.2"
 	},
@@ -48,20 +43,13 @@
 		"@nico-i/eslint-config": "^1.1.0",
 		"@nico-i/prettier-config": "^1.0.0",
 		"@nico-i/ts-config": "^1.2.0",
-		"@types/bun": "latest",
 		"commitlint-plugin-spend": "^1.0.1",
 		"eslint": "9.x",
 		"globals": "^15.6.0",
 		"husky": "^9.0.11",
-		"jest": "^29.0.0",
 		"lint-staged": "^15.2.6",
 		"prettier": "^3.3.2",
-		"yeoman-assert": "^3.1.1",
-		"yeoman-test": "^8.0.0",
 		"yo": "^5.0.0"
-	},
-	"jest": {
-		"testEnvironment": "node"
 	},
 	"lint-staged": {
 		"*.{js,ts,jsx,tsx}": [
@@ -83,14 +71,10 @@
 		"lint": "bunx eslint .",
 		"lint:fix": "bunx eslint --fix .",
 		"lint:types": "tsc --noEmit --incremental false",
-		"test": "jest",
 		"prepare": "husky || true",
 		"format": "prettier --write .",
 		"format:check": "prettier --check ."
 	},
 	"repository": "nico-i/generator-ts",
-	"license": "MIT",
-	"peerDependencies": {
-		"typescript": "^5.0.0"
-	}
+	"license": "MIT"
 }

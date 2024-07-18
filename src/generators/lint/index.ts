@@ -1,3 +1,4 @@
+import { JSONSchema7Object } from "json-schema";
 import Generator from "yeoman-generator";
 import { Format } from "../../lib/Format";
 
@@ -8,8 +9,8 @@ interface Options {
 module.exports = class extends Generator<Options> {
 	private setupLintStaged: boolean = false;
 	private installHusky: boolean = false;
-	/*eslint-disable @typescript-eslint/no-explicit-any*/
-	private packageJsonContent: Record<string, any> = {};
+
+	private packageJsonContent: JSONSchema7Object = {};
 
 	async prompting() {
 		this.setupLintStaged = await this.prompt([
@@ -29,7 +30,17 @@ module.exports = class extends Generator<Options> {
 				`No package.json found in the project directory. Please run this generator in the root of your project.`,
 			);
 		}
-		this.packageJsonContent = this.fs.readJSON(packageJsonPath);
+		const pkgJsonContent = this.fs.readJSON(packageJsonPath);
+
+		if (
+			!pkgJsonContent ||
+			typeof pkgJsonContent !== `object` ||
+			Array.isArray(pkgJsonContent)
+		) {
+			throw new Error(`package.json is empty`);
+		}
+
+		this.packageJsonContent = pkgJsonContent;
 	}
 
 	writing() {
@@ -49,8 +60,18 @@ module.exports = class extends Generator<Options> {
 		);
 		if (this.fs.exists(this.destinationPath(`.eslintrc.json`))) {
 			const eslintConfig = this.fs.readJSON(this.templatePath(`.eslintrc.json`));
+
+			if (
+				!eslintConfig ||
+				typeof eslintConfig !== `object` ||
+				Array.isArray(eslintConfig)
+			) {
+				throw new Error(`.eslintrc.json is not a valid JSON file`);
+			}
+
 			this.fs.extendJSON(this.destinationPath(`.eslintrc.json`), {
 				...eslintConfig,
+				extends: "@nico-i/eslint-config/basic",
 			});
 		} else {
 			this.fs.copy(
@@ -82,10 +103,13 @@ module.exports = class extends Generator<Options> {
 		});
 		this.log(Format.success(`Lint-staged added to package.json!`));
 
-		if (
-			!this.packageJsonContent.husky &&
-			!this.packageJsonContent.scripts.prepare.includes(`husky`)
-		) {
+		const isHuskyInstalled =
+			typeof this.packageJsonContent.devDependencies === "object" &&
+			this.packageJsonContent.devDependencies !== null &&
+			!Array.isArray(this.packageJsonContent.devDependencies) &&
+			this.packageJsonContent.devDependencies.husky;
+
+		if (isHuskyInstalled) {
 			this.log(
 				Format.warning(
 					`husky does not seem to be installed, husky will be installed`,
@@ -94,7 +118,15 @@ module.exports = class extends Generator<Options> {
 			this.installHusky = true;
 		}
 
-		if (!this.packageJsonContent.scripts.prepare.includes(`husky`)) {
+		const isHuskyInPrepareScript =
+			typeof this.packageJsonContent.scripts === "object" &&
+			this.packageJsonContent.scripts !== null &&
+			!Array.isArray(this.packageJsonContent.scripts) &&
+			typeof this.packageJsonContent.scripts.prepare === "string" &&
+			this.packageJsonContent.scripts.prepare.includes("husky");
+
+		if (!isHuskyInPrepareScript) {
+			this.log(Format.step(`Adding husky to prepare script`));
 			this.fs.extendJSON(packageJsonPath, {
 				scripts: {
 					prepare: `husky || true`,
