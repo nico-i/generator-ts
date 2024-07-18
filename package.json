@@ -28,7 +28,7 @@
 		"@types/mem-fs": "^1.1.5",
 		"@types/yeoman-generator": "5.2.14",
 		"@types/yosay": "2.0.3",
-		"chalk": "4.1.2",
+		"chalk": "5.3.0",
 		"gulp": "^5.0.0",
 		"gulp-cli": "^3.0.0",
 		"gulp-typescript": "^6.0.0-alpha.1",
