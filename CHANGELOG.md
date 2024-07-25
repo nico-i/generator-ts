@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.3.1](https://github.com/nico-i/generator-ts/compare/v1.3.0...v1.3.1) (2024-07-25)
+
+
+### Bug Fixes
+
+* added .npmignore to copy .gitignore ([ce1daa7](https://github.com/nico-i/generator-ts/commit/ce1daa7d18e2f3e53e01603ca08790dbabf83d04))
+* wrong condition ([2a820ed](https://github.com/nico-i/generator-ts/commit/2a820edbb24ba806efc309ee1b1422007556ea3a))
+
 ## [1.3.0](https://github.com/nico-i/generator-ts/compare/v1.2.0...v1.3.0) (2024-07-25)
 
 
