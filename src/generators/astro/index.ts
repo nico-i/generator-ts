@@ -6,6 +6,7 @@ enum Features {
 	GQL = `GraphQL TS SDK generation`,
 	DOT_ENV = `dotenvx`,
 	FAVICON_GEN = `Favicon generation`,
+	GH_PAGES = `GitHub Pages deployment action`,
 }
 
 enum OptionNames {
@@ -157,6 +158,9 @@ export default class extends Generator<Options> {
 					break;
 				case Features.FAVICON_GEN:
 					this.composeWith(require.resolve(`../favicon`));
+					break;
+				case Features.GH_PAGES:
+					this.composeWith(require.resolve(`../astro-gh-pages`));
 					break;
 			}
 		});

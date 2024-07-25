@@ -2,6 +2,8 @@ import chalk from "chalk";
 import Generator from "yeoman-generator";
 import yosay from "yosay";
 import { Format } from "../../lib/Format";
+import { GeneratorArgs } from "../../lib/types/Args";
+import { GeneratorOptions } from "../../lib/types/Options";
 
 enum ProjectTypes {
 	SSG = `SSG-based Web App`,
@@ -17,9 +19,17 @@ enum OptionNames {
 
 export default class extends Generator {
 	private projectAuthorName: string = `Nico Ismaili`;
-	private projectName: string = `ts-project`;
+	private projectName: string;
 	private projectDescription: string = `A TypeScript project`;
 	private projectType: ProjectTypes = ProjectTypes.SSG;
+
+	private hasDotGit: boolean = false;
+	private initGit: boolean = false;
+
+	constructor(args: GeneratorArgs, opts: GeneratorOptions) {
+		super(args, opts);
+		this.projectName = this.destinationRoot().split(`/`).pop() || "ts-project";
+	}
 
 	initializing() {
 		this.log(
@@ -29,9 +39,23 @@ export default class extends Generator {
 				)} project ${chalk.yellow(`generator`)}!`,
 			),
 		);
+
+		this.hasDotGit = this.fs.exists(this.destinationPath(`.git`));
 	}
 
 	async prompting() {
+		if (this.hasDotGit) {
+			this.initGit = (
+				await this.prompt([
+					{
+						type: `confirm`,
+						name: `initGit`,
+						message: `Initialize a new Git repository?`,
+						default: true,
+					},
+				])
+			).initGit;
+		}
 		this.projectAuthorName = (
 			await this.prompt([
 				{
@@ -73,6 +97,12 @@ export default class extends Generator {
 				},
 			])
 		).type;
+	}
+
+	writing() {
+		if (this.initGit) {
+			this.spawnCommandSync(`git`, [`init`]);
+		}
 
 		switch (this.projectType) {
 			case ProjectTypes.SSG:
