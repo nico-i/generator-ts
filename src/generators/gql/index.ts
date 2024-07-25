@@ -1,7 +1,7 @@
 import Generator from "yeoman-generator";
-import { Format } from "../../lib/Format";
-import { GeneratorArgs } from "../../lib/types/Args";
-import { GeneratorOptions } from "../../lib/types/Options";
+import { Format } from "../../lib/Format.js";
+import { GeneratorArgs } from "../../lib/types/Args.js";
+import { GeneratorOptions } from "../../lib/types/Options.js";
 
 enum OptionNames {
 	SCHEMA_PATH = `schemaPath`,
@@ -10,12 +10,12 @@ enum OptionNames {
 	OUTPUT_PATH = `outputPath`,
 }
 
-interface Options {
+type Options = {
 	[OptionNames.SCHEMA_PATH]: string;
 	[OptionNames.HEADERS]: string;
 	[OptionNames.DOCUMENTS]: string;
 	[OptionNames.OUTPUT_PATH]: string;
-}
+};
 
 export default class extends Generator<Options> {
 	private schemaPath: string = ``;

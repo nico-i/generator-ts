@@ -1,12 +1,12 @@
 import { JSONSchema7Object } from "json-schema";
 import Generator from "yeoman-generator";
-import { Format } from "../../lib/Format";
+import { Format } from "../../lib/Format.js";
 
-interface Options {
+type Options = {
 	setupLintStaged: boolean;
-}
+};
 
-module.exports = class extends Generator<Options> {
+export default class extends Generator<Options> {
 	private setupLintStaged: boolean = false;
 	private installHusky: boolean = false;
 
@@ -163,4 +163,4 @@ module.exports = class extends Generator<Options> {
 			`@nico-i/eslint-config`,
 		]);
 	}
-};
+}

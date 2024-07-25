@@ -1,17 +1,17 @@
 import Generator from "yeoman-generator";
-import { Format } from "../../lib/Format";
+import { Format } from "../../lib/Format.js";
 
 enum OptionNames {
 	FAVICON_PATH = `faviconPath`,
 	OUTPUT_DIR_PATH = `outputDirPath`,
 }
 
-interface Options {
+type Options = {
 	[OptionNames.FAVICON_PATH]: string;
 	[OptionNames.OUTPUT_DIR_PATH]: string;
-}
+};
 
-module.exports = class extends Generator<Options> {
+export default class extends Generator<Options> {
 	private faviconPath: string = ``;
 	private outputDirPath: string = ``;
 	private htmlCode: string = ``;
@@ -121,4 +121,4 @@ module.exports = class extends Generator<Options> {
 		this.spawnCommandSync(`rm`, [this.destinationPath(`tmp.json`)]);
 		this.log(Format.success(`Temporary files deleted`));
 	}
-};
+}

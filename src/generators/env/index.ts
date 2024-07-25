@@ -1,8 +1,8 @@
 import { JSONSchema7Object } from "json-schema";
 import Generator from "yeoman-generator";
-import { Format } from "../../lib/Format";
+import { Format } from "../../lib/Format.js";
 
-module.exports = class extends Generator {
+export default class extends Generator {
 	private scripts?: JSONSchema7Object;
 	private scriptNamesToUpdate: string[] = [];
 
@@ -48,9 +48,15 @@ module.exports = class extends Generator {
 		this.fs.write(this.destinationPath(`.env`), ``);
 		this.log(Format.success(`.env file created successfully`));
 
-		if (this.scriptNamesToUpdate.length > 0) {
+		if (this.scriptNamesToUpdate.length === 0) {
 			return;
 		}
+
+		this.log(
+			Format.step(
+				`Updating scripts "${this.scriptNamesToUpdate.join(`", "`)}"...`,
+			),
+		);
 
 		const updatedScripts = this.scriptNamesToUpdate.reduce<JSONSchema7Object>(
 			(acc, scriptName) => {
@@ -76,4 +82,4 @@ module.exports = class extends Generator {
 	install() {
 		this.spawnCommand(`bun`, [`add`, `@dotenvx/dotenvx`]);
 	}
-};
+}

@@ -1,5 +1,5 @@
 import Generator from "yeoman-generator";
-import { Format } from "../../lib/Format";
+import { Format } from "../../lib/Format.js";
 
 type Options = {
 	setupReleasePlease: boolean;

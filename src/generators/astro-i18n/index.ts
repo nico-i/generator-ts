@@ -1,5 +1,5 @@
 import Generator from "yeoman-generator";
-import { Format } from "../../lib/Format";
+import { Format } from "../../lib/Format.js";
 
 export default class extends Generator {
 	private locales: string[] = [];
@@ -20,7 +20,6 @@ export default class extends Generator {
 					type: `checkbox`,
 					name: `locales`,
 					message: `What languages would you like to support?`,
-					required: true,
 					choices: [
 						{
 							value: `en`,
@@ -103,6 +102,11 @@ export default class extends Generator {
 			);
 		} else {
 			const astroConfig = this.fs.read(this.destinationPath(`astro.config.mjs`));
+			if (!astroConfig) {
+				throw new Error(
+					`Error reading astro.config.mjs. Please ensure the file exists and is readable.`,
+				);
+			}
 			if (astroConfig.includes(`astroI18next`)) {
 				throw new Error(
 					`Your project already contains a astro-i18next integration in astro.config.mjs`,
@@ -122,7 +126,6 @@ export default class extends Generator {
 					integrations: [astroI18next()],`,
 				);
 			}
-			this.log(newAstroConfig);
 			this.fs.delete(this.destinationPath(`astro.config.mjs`));
 			this.fs.write(this.destinationPath(`astro.config.mjs`), newAstroConfig);
 		}

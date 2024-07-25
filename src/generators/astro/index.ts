@@ -16,22 +16,20 @@ enum OptionNames {
 	APP_TITLE = `appTitle`,
 }
 
-interface Options {
+type Options = {
 	[OptionNames.PROJECT_AUTHOR_NAME]: string;
 	[OptionNames.PROJECT_NAME]: string;
 	[OptionNames.PROJECT_DESCRIPTION]: string;
 	[OptionNames.APP_TITLE]: string;
 	[OptionNames.FEATURES]: Features[];
-}
-
-type Answers = Generator.GeneratorOptions & Options;
+};
 
 export default class extends Generator<Options> {
-	private projectAuthorName: Answers[OptionNames.PROJECT_AUTHOR_NAME] = `Nico Ismaili`;
-	private projectName: Answers[OptionNames.PROJECT_NAME] = `ssg-project`;
-	private projectDescription: Answers[OptionNames.PROJECT_DESCRIPTION] = `Astro App`;
-	private appTitle: Answers[OptionNames.APP_TITLE] = `Astro App`;
-	private additionalFeatures: Answers[OptionNames.FEATURES] = [];
+	private projectAuthorName: Options[OptionNames.PROJECT_AUTHOR_NAME] = `Nico Ismaili`;
+	private projectName: Options[OptionNames.PROJECT_NAME] = `ssg-project`;
+	private projectDescription: Options[OptionNames.PROJECT_DESCRIPTION] = `Astro App`;
+	private appTitle: Options[OptionNames.APP_TITLE] = `Astro App`;
+	private additionalFeatures: Options[OptionNames.FEATURES] = [];
 
 	constructor(args: string | string[], opts: Options) {
 		super(args, opts);

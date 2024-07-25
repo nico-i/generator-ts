@@ -1,7 +1,7 @@
 import Generator from "yeoman-generator";
-import { Format } from "../../lib/Format";
-import { GeneratorArgs } from "../../lib/types/Args";
-import { GeneratorOptions } from "../../lib/types/Options";
+import { Format } from "../../lib/Format.js";
+import { GeneratorArgs } from "../../lib/types/Args.js";
+import { GeneratorOptions } from "../../lib/types/Options.js";
 
 enum OptionNames {
 	DEPLOY_WORKFLOW_NAME = `deployWorkflowName`,
@@ -9,13 +9,13 @@ enum OptionNames {
 	DEPLOYED_PAGE_URL = `deployedPageUrl`,
 }
 
-interface Options {
+type Options = {
 	[OptionNames.DEPLOY_WORKFLOW_NAME]: string;
 	[OptionNames.OUTPUT_DIR]: string;
 	[OptionNames.DEPLOYED_PAGE_URL]: string;
-}
+};
 
-module.exports = class extends Generator<Options> {
+export default class extends Generator<Options> {
 	private deployWorkflowName: string = ``;
 	private outputDir: string = ``;
 	private deployedPageUrl: string = ``;
@@ -43,7 +43,7 @@ module.exports = class extends Generator<Options> {
 	}
 
 	async prompting() {
-		const prompts = [
+		const answers = await this.prompt([
 			{
 				type: `input`,
 				name: OptionNames.DEPLOY_WORKFLOW_NAME,
@@ -72,9 +72,7 @@ module.exports = class extends Generator<Options> {
 					}
 				},
 			},
-		];
-
-		const answers = await this.prompt(prompts);
+		]);
 
 		this.deployWorkflowName = answers[OptionNames.DEPLOY_WORKFLOW_NAME];
 		this.outputDir = answers[OptionNames.OUTPUT_DIR];
@@ -96,4 +94,4 @@ module.exports = class extends Generator<Options> {
 		);
 		this.log(Format.success(`Workflow added successfully`));
 	}
-};
+}
