@@ -1,6 +1,6 @@
 {
 	"name": "@nico-i/generator-ts",
-	"version": "1.1.0",
+	"version": "1.1.1",
 	"description": "A yeoman generator for all my TypeScript related projects",
 	"author": {
 		"name": "Nico Ismaili",
