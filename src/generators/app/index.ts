@@ -44,7 +44,7 @@ export default class extends Generator {
 	}
 
 	async prompting() {
-		if (this.hasDotGit) {
+		if (!this.hasDotGit) {
 			this.initGit = (
 				await this.prompt([
 					{
