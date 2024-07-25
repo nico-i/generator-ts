@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/nico-i/generator-ts/compare/v1.1.1...v1.2.0) (2024-07-25)
+
+
+### Features
+
+* default proj name based on dir + git init ([f32d574](https://github.com/nico-i/generator-ts/commit/f32d5748bc2cdf6a7f5b70f06cf190fc36a7b3e7))
+
 ## [1.1.1](https://github.com/nico-i/generator-ts/compare/v1.1.0...v1.1.1) (2024-07-25)
 
 
