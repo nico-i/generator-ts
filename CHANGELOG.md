@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/nico-i/generator-ts/compare/v1.1.0...v1.1.1) (2024-07-25)
+
+
+### Bug Fixes
+
+* astro generator ([120c3c2](https://github.com/nico-i/generator-ts/commit/120c3c2396fc9406ef76d2d57ffe5e308bea4aa1))
+
 ## [1.1.0](https://github.com/nico-i/generator-ts/compare/v1.0.1...v1.1.0) (2024-07-18)
 
 
