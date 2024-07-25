@@ -27,7 +27,9 @@ export default class extends Generator<Options> {
 		}
 
 		this.log(Format.step(`Adding GitHub actions workflow`));
-		this.fs.copy(this.templatePath(), this.destinationPath());
+		this.fs.copy(this.templatePath(), this.destinationPath(), {
+			globOptions: { dot: true },
+		});
 		this.log(Format.success(`Action added successfully`));
 
 		this.log(
