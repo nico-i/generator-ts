@@ -2,3 +2,4 @@ node_modules
 coverage
 generators**/*
 lib/**/*
+!src/generators/astro/templates/.gitignore
