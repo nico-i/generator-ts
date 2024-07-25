@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/nico-i/generator-ts/compare/v1.2.0...v1.3.0) (2024-07-25)
+
+
+### Features
+
+* enabled copying dot files ([456ec25](https://github.com/nico-i/generator-ts/commit/456ec250679c6bbb5f1ef44228f8cdffb4a5b428))
+
 ## [1.2.0](https://github.com/nico-i/generator-ts/compare/v1.1.1...v1.2.0) (2024-07-25)
 
 
