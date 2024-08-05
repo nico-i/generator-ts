@@ -1,5 +1,3 @@
-import base from "@nico-i/eslint-config";
+import configs from "@nico-i/eslint-config";
 
-export default {
-	  ...base,
-};
+export default [...configs];
