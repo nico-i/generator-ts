@@ -67,6 +67,7 @@ export default class extends Generator<Options> {
 					try {
 						new URL(input);
 						return true;
+						// eslint-disable-next-line @typescript-eslint/no-unused-vars
 					} catch (error) {
 						return `Invalid URL`;
 					}

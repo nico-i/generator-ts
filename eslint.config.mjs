@@ -8,6 +8,11 @@ export default [
 	pluginJs.configs.recommended,
 	...tseslint.configs.recommended,
 	{
-		ignores: ["**/templates/**/*", ".prettierrc.cjs"],
+		ignores: [
+			"**/templates/**/*",
+			".prettierrc.cjs",
+			"generators/**/*",
+			"lib/**/*",
+		],
 	},
 ];

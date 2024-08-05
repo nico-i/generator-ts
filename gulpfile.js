@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable @typescript-eslint/no-require-imports */
 const gulp = require("gulp");
 const ts = require("gulp-typescript");
 const tsProject = ts.createProject("tsconfig.json");

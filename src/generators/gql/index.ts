@@ -4,38 +4,33 @@ import { GeneratorArgs } from "../../lib/types/Args.js";
 import { GeneratorOptions } from "../../lib/types/Options.js";
 
 enum OptionNames {
-	SCHEMA_PATH = `schemaPath`,
+	API_URL = `apiUrl`,
 	HEADERS = `headers`,
 	DOCUMENTS = `documentPaths`,
 	OUTPUT_PATH = `outputPath`,
 }
 
 type Options = {
-	[OptionNames.SCHEMA_PATH]: string;
+	[OptionNames.API_URL]: string;
 	[OptionNames.HEADERS]: string;
 	[OptionNames.DOCUMENTS]: string;
 	[OptionNames.OUTPUT_PATH]: string;
 };
 
 export default class extends Generator<Options> {
-	private schemaPath: string = ``;
+	private apiUrl: string = ``;
 	private headers: string | undefined;
 	private documents: string = `[]`;
 	private outputPath: string = ``;
 	private setupWatcher: boolean = true;
 
-	private parseDocumentsConfigStr(documentsValue: string) {
-		const cleanedStr = documentsValue.replace(/'/g, `"`);
-		return JSON.parse(cleanedStr);
-	}
-
 	constructor(args: GeneratorArgs, opts: GeneratorOptions<Options>) {
 		super(args, opts);
 
-		this.argument(OptionNames.SCHEMA_PATH, {
+		this.argument(OptionNames.API_URL, {
 			type: String,
 			required: false,
-			description: `Path or URL to the schema file`,
+			description: `URL to the GraphQL API`,
 		});
 
 		this.argument(OptionNames.HEADERS, {
@@ -58,32 +53,31 @@ export default class extends Generator<Options> {
 	}
 
 	async prompting() {
-		this.schemaPath =
-			this.options[OptionNames.SCHEMA_PATH] ||
+		this.apiUrl =
+			this.options[OptionNames.API_URL] ||
 			(
 				await this.prompt({
 					type: `input`,
-					name: OptionNames.SCHEMA_PATH,
-					message: `What is the path / URL to your schema file?`,
+					name: OptionNames.API_URL,
+					message: `What is the URL of your GraphQL API?`,
 					validate: (input) => {
 						if (!input) {
-							return `Schema path is required`;
+							return `API URL is required`;
 						}
-						if (!this.fs.exists(input)) {
-							try {
-								const url = new URL(input);
-								if (url.protocol === `http:` || url.protocol === `https:`) {
-									return true;
-								}
-							} catch (e) {
-								return `Schema file does not exist`;
+						try {
+							const url = new URL(input);
+							if (url.protocol === `http:` || url.protocol === `https:`) {
+								return true;
 							}
+							// eslint-disable-next-line @typescript-eslint/no-unused-vars
+						} catch (e) {
+							return `Invalid URL`;
 						}
 
 						return true;
 					},
 				})
-			)[OptionNames.SCHEMA_PATH];
+			)[OptionNames.API_URL];
 
 		const hasCustomHeaders = (
 			await this.prompt({
@@ -114,15 +108,17 @@ export default class extends Generator<Options> {
 					type: `input`,
 					name: OptionNames.DOCUMENTS,
 					message: `What are the patterns to find the GraphQL definitions in your project?`,
+					default: `[ "./src/**/*.graphql" ]`,
 					validate: (input) => {
 						if (!input) {
 							return `At least one pattern is required`;
 						}
 						try {
-							const patternList = this.parseDocumentsConfigStr(input);
+							const patternList = JSON.parse(input);
 							if (patternList.lenght === 0) {
 								return `At least one pattern is required`;
 							}
+							// eslint-disable-next-line @typescript-eslint/no-unused-vars
 						} catch (e) {
 							return `Patterns must be provided as a JSON array of strings. "${input}" is not parsable to JSON.`;
 						}
@@ -131,7 +127,7 @@ export default class extends Generator<Options> {
 				})
 			)[OptionNames.DOCUMENTS];
 
-		this.documents = this.parseDocumentsConfigStr(documentsAnswer);
+		this.documents = JSON.parse(documentsAnswer);
 
 		this.outputPath =
 			this.options[OptionNames.OUTPUT_PATH] ||
@@ -139,7 +135,8 @@ export default class extends Generator<Options> {
 				await this.prompt({
 					type: `input`,
 					name: OptionNames.OUTPUT_PATH,
-					message: `Where would you like to save the generated output?`,
+					default: `./infrastructure/graphql/sdk.ts`,
+					message: `Where would you like to put the generated sdk?`,
 					validate: (input) => {
 						if (!input) {
 							return `Output path is required`;
@@ -159,13 +156,128 @@ export default class extends Generator<Options> {
 		).setupWatcher;
 	}
 
-	writing() {
+	async writing() {
+		this.log(Format.step("Fetching schema from the API"));
+		try {
+			const res = await fetch(this.apiUrl, {
+				method: `POST`,
+				headers: {
+					"Content-Type": `application/json`,
+					...(this.headers ? JSON.parse(this.headers) : {}),
+				},
+				body: JSON.stringify({
+					query: `
+	fragment FullType on __Type {
+		kind
+		name
+		fields(includeDeprecated: true) {
+			name
+			args {
+				...InputValue
+			}
+			type {
+				...TypeRef
+			}
+			isDeprecated
+			deprecationReason
+		}
+		inputFields {
+			...InputValue
+		}
+		interfaces {
+			...TypeRef
+		}
+		enumValues(includeDeprecated: true) {
+			name
+			isDeprecated
+			deprecationReason
+		}
+		possibleTypes {
+			...TypeRef
+		}
+	}
+	fragment InputValue on __InputValue {
+		name
+		type {
+			...TypeRef
+		}
+		defaultValue
+	}
+	fragment TypeRef on __Type {
+		kind
+		name
+		ofType {
+			kind
+			name
+			ofType {
+				kind
+				name
+				ofType {
+					kind
+					name
+					ofType {
+						kind
+						name
+						ofType {
+							kind
+							name
+							ofType {
+								kind
+								name
+								ofType {
+									kind
+									name
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	query IntrospectionQuery {
+		__schema {
+			queryType {
+				name
+			}
+			mutationType {
+				name
+			}
+			types {
+				...FullType
+			}
+			directives {
+				name
+				locations
+				args {
+					...InputValue
+				}
+			}
+		}
+	}
+`,
+				}),
+			}).then((res) => res.json());
+
+			if (typeof res !== "object" || res === null || "data" in res === false) {
+				throw new Error(`Failed to fetch schema`);
+			}
+
+			const data = res.data;
+			this.log(Format.success("Schema fetched successfully"));
+			this.log(Format.step("Writing schema to file"));
+			this.fs.write(this.destinationPath(`schema.json`), JSON.stringify(data));
+			this.log(Format.success("Schema written to file"));
+		} catch (error: unknown) {
+			throw new Error(`Failed to fetch schema: ${error}`);
+		}
+
 		this.log(Format.step(`Generating codegen config file`));
 		this.fs.copyTpl(
 			this.templatePath(`codegen.ts`),
 			this.destinationPath(`codegen.ts`),
 			{
-				[OptionNames.SCHEMA_PATH]: this.schemaPath,
+				schemaPath: `./schema.json`,
 				[OptionNames.HEADERS]: this.headers,
 				[OptionNames.DOCUMENTS]: this.documents,
 				[OptionNames.OUTPUT_PATH]: this.outputPath,
