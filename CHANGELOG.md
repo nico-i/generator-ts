@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.1](https://github.com/nico-i/generator-ts/compare/v1.4.0...v1.4.1) (2024-08-05)
+
+
+### Bug Fixes
+
+* used newer eslint version ([5876467](https://github.com/nico-i/generator-ts/commit/5876467290ef1231b51dea2f44c7e11251d1f264))
+
 ## [1.4.0](https://github.com/nico-i/generator-ts/compare/v1.3.1...v1.4.0) (2024-08-05)
 
 
