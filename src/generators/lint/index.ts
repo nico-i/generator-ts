@@ -53,32 +53,12 @@ export default class extends Generator<Options> {
 		);
 		this.log(Format.success(`Prettier config added to project directory!`));
 
-		this.log(
-			Format.step(
-				`Adding or attempting to extend eslint config to project directory`,
-			),
+		this.log(Format.step(`Adding eslint config to project directory`));
+
+		this.fs.copy(
+			this.templatePath(`eslint.config.js`),
+			this.destinationPath(`eslint.config.js`),
 		);
-		if (this.fs.exists(this.destinationPath(`.eslintrc.json`))) {
-			const eslintConfig = this.fs.readJSON(this.templatePath(`.eslintrc.json`));
-
-			if (
-				!eslintConfig ||
-				typeof eslintConfig !== `object` ||
-				Array.isArray(eslintConfig)
-			) {
-				throw new Error(`.eslintrc.json is not a valid JSON file`);
-			}
-
-			this.fs.extendJSON(this.destinationPath(`.eslintrc.json`), {
-				...eslintConfig,
-				extends: "@nico-i/eslint-config/basic",
-			});
-		} else {
-			this.fs.copy(
-				this.templatePath(`.eslintrc.json`),
-				this.destinationPath(`.eslintrc.json`),
-			);
-		}
 
 		this.log(Format.step(`Adding lint- and format-scripts to package.json`));
 		this.fs.extendJSON(packageJsonPath, {
