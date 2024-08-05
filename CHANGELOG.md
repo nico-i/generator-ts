@@ -1,5 +1,20 @@
 # Changelog
 
+## [1.4.0](https://github.com/nico-i/generator-ts/compare/v1.3.1...v1.4.0) (2024-08-05)
+
+
+### Features
+
+* used newer eslint config ([3f90fb0](https://github.com/nico-i/generator-ts/commit/3f90fb076cc24df5308fbaa8c2dde58d573b2ae9))
+
+
+### Bug Fixes
+
+* **deps:** update dependency @astrojs/check to ^0.9.0 ([5f1f91f](https://github.com/nico-i/generator-ts/commit/5f1f91f01bcc71ef7f7e6f0ae61c2a33f7fb428b))
+* **deps:** update dependency typescript-eslint to v8 ([81f3df1](https://github.com/nico-i/generator-ts/commit/81f3df123652686ffc168e407c785dbc6f2ccdcb))
+* force not ignoring astro gitignore ([c07883b](https://github.com/nico-i/generator-ts/commit/c07883b4e909f79b680acf77a6262b18478161dc))
+* typo ([a8ef6b2](https://github.com/nico-i/generator-ts/commit/a8ef6b2a7db51561841a8e9de4f56c16db889fd0))
+
 ## [1.3.1](https://github.com/nico-i/generator-ts/compare/v1.3.0...v1.3.1) (2024-07-25)
 
 
