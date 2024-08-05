@@ -139,7 +139,7 @@ export default class extends Generator<Options> {
 			`prettier`,
 			`@nico-i/prettier-config`,
 			`lint-staged`,
-			`eslint@^8.57.0`,
+			`eslint`,
 			`@nico-i/eslint-config`,
 		]);
 	}
