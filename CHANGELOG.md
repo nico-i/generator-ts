@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.5.0](https://github.com/nico-i/generator-ts/compare/v1.4.2...v1.5.0) (2024-08-05)
+
+
+### Features
+
+* added introspection ([aa1ead3](https://github.com/nico-i/generator-ts/commit/aa1ead39378672ecdc68f7a6b7a69661014c26d5))
+
 ## [1.4.2](https://github.com/nico-i/generator-ts/compare/v1.4.1...v1.4.2) (2024-08-05)
 
 
