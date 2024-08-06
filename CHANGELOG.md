@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.6.0](https://github.com/nico-i/generator-ts/compare/v1.5.0...v1.6.0) (2024-08-06)
+
+
+### Features
+
+* added .gitignore to astro gen templates ([89fba33](https://github.com/nico-i/generator-ts/commit/89fba33e3842714f43886bd52a09e56e4b51e790))
+
 ## [1.5.0](https://github.com/nico-i/generator-ts/compare/v1.4.2...v1.5.0) (2024-08-05)
 
 
