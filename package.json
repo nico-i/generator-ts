@@ -46,7 +46,7 @@
 		"commitlint-plugin-spend": "latest",
 		"eslint": "9.x",
 		"husky": "^9.0.11",
-		"lint-staged": "^15.2.6",
+		"lint-staged": "^16.0.0",
 		"prettier": "^3.3.2",
 		"yo": "^5.0.0"
 	},
